@@ -1,6 +1,6 @@
 # timecut
 
-**timecut** is a Node.js program that records smooth movies of webpages. It uses **[timesnap](https://github.com/tungs/timesnap)** and [puppeteer](https://github.com/GoogleChrome/puppeteer) to open a webpage, overwrite its time-handling functions, and takes snapshots of the webpage, and passes the results to ffmpeg to encode those frames into a movie. This allows for slower than realtime and/or high rate capture of frames, while the resulting movie is smooth.
+**timecut** is a Node.js program that records smooth movies of webpages. It uses **[timesnap](https://github.com/tungs/timesnap)** and [puppeteer](https://github.com/GoogleChrome/puppeteer) to open a webpage, overwrite its time-handling functions, and takes snapshots of the webpage, and passes the results to ffmpeg to encode those frames into a movie. This allows for slower-than-realtime and/or virtual high-fps capture of frames, while the resulting movie is smooth.
 
 **timecut** requires ffmpeg to be installed. **timecut** can be run from the command line or as a Node.js library.
 
@@ -130,8 +130,8 @@ Opens https://tungs.github.io/truchet-tiles-original/ with the appropriate fragm
     * Wait *n real seconds* after loading.
 * <a name="cli-options-quiet" href="#cli-options-quiet">#</a> Quiet: `-q`, `--quiet`
     * Suppress console logging.
-* <a name="cli-options-extra-input-options" href="#cli-options-extra-input-options">#</a> Extra input options: `e`, `--input-options`. Extra arguments for ffmpeg input, enclosed in quotes. Example: `--input-options="-framerate 30"`
-* <a name="cli-options-extra-output-options" href="#cli-options-extra-output-options">#</a> Extra output options: `e`, `--input-options`. Extra arguments for ffmpeg output, enclosed in quotes. Example: `--output-options="-vf scale=320:240"`
+* <a name="cli-options-extra-input-options" href="#cli-options-extra-input-options">#</a> Extra input options: `-e`, `--input-options`. Extra arguments for ffmpeg input, enclosed in quotes. Example: `--input-options="-framerate 30"`
+* <a name="cli-options-extra-output-options" href="#cli-options-extra-output-options">#</a> Extra output options: `-E`, `--input-options`. Extra arguments for ffmpeg output, enclosed in quotes. Example: `--output-options="-vf scale=320:240"`
     * Pixel Format for output video (default: `yuv420p`).
 * <a name="cli-options-pixel-format" href="#cli-options-pixel-format">#</a> Pixel Format: `--pix-fmt` *pixel format*
     * Pixel Format for output video (default: `yuv420p`).
