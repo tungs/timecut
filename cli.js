@@ -35,16 +35,6 @@
 const commander = require('commander');
 const recorder = require('./index.js');
 
-
-var sliceIndex = process.argv.indexOf('--');
-var commanderArgs, ffmpegArgs = [];
-if (sliceIndex !== -1) {
-  commanderArgs = process.argv.slice(0, sliceIndex);
-  ffmpegArgs = process.argv.slice(sliceIndex + 1);
-} else {
-  commanderArgs = process.argv;
-}
-
 commander
   .version('0.0.1-prerelease', '-v, --version')
   .usage('<url> [options]')
@@ -57,6 +47,7 @@ commander
     var dims = str.split(',').map(function (d) { return parseInt(d); });
     return dims.length > 1 ? { width: dims[0], height: dims[1] } : { width: dims[0] };
   })
+  .option('--transparent-background', 'Allow transparent backgrounds (only works for certain encodings)')
   .option('--even-width', 'Rounds capture width up to the nearest even number')
   .option('-f, --frame-cache [directory]', 'Save frames in a temporary directory before processing')
   .option('-e, --input-options <options>', 'Extra arguments for ffmpeg input', function (str) {
@@ -83,5 +74,4 @@ commander
   .parse(commanderArgs);
 
 commander.url = commander.args[0];
-commander.ffmpegArgs = ffmpegArgs;
 recorder(commander);

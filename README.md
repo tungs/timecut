@@ -9,8 +9,8 @@
 
 ## <a name="modes" href="#modes">#</a> **timecut** Modes
 **timecut** can pass frames to ffmpeg using one of two methods:
-  * <a name="cache-frame-mode" href="#cache-frame-mode">#</a> **Cache frame mode** stores each frame temporarily in the working directory, before running ffmpeg on all of the images. This mode can use a lot of temporary space (multiple gigabytes per second of recorded time), but takes up less memory, and it is more stable than **pipe mode**. This is currently enabled by default, though it may change in the future. To explicitly use this in cases if the default mode changes, use the `--frame-cache` option from the command line or setting `config.frameCache` to true when using it as a Node.js library.
-  * <a name="pipe-mode" href="#pipe-mode">#</a> **Pipe mode** (experimental) pipes each frame directly to `ffmpeg`, without saving each frame. This takes up less temporary space than *cache frame mode*, but it currently has some observed stability issues. To use this mode, use the `--pipe-mode` option from the command line or setting `config.pipeCache` to true when using it as a Node.js library. If you run into issues, you may want to use [cache frame mode](#cache-frame-mode), or install and use **timesnap** and [pipe it directly to ffmpeg](https://github.com/tungs/timesnap#cli-example-piping). Both alternative implementations seem more stable than the current `pipe-mode`.
+  * <a name="cache-frame-mode" href="#cache-frame-mode">#</a> **Cache frame mode** stores each frame temporarily in the working directory, before running ffmpeg on all of the images. This mode can use a lot of temporary space (multiple gigabytes per second of recorded time), but takes up less memory, and it is more stable than **pipe mode**. This is currently enabled by default, though it may change in the future. To explicitly use this in case of the default mode changing, use the `--frame-cache` option from the command line or setting `config.frameCache` to true when using it as a Node.js library.
+  * <a name="pipe-mode" href="#pipe-mode">#</a> **Pipe mode** (experimental) pipes each frame directly to `ffmpeg`, without saving each frame. This takes up less temporary space than *cache frame mode*, but it currently has some observed stability issues. To use this mode, use the `--pipe-mode` option from the command line or setting `config.pipeCache` to true when using it as a Node.js library. If you run into issues, you may want to use [cache frame mode](#cache-frame-mode), or install and use **timesnap** and [pipe it directly to ffmpeg](https://github.com/tungs/timesnap#cli-example-piping). Both alternative implementations seem more stable than the current pipe mode.
 
 ## Read Me Contents
 
@@ -65,7 +65,8 @@ Opens `index.html` in the current working directory, sets the viewport to 800x60
 
 **<a name="cli-example-viewport-fps-duration-mode-output" href="#cli-example-viewport-fps-duration-mode-output">#</a> Setting viewport size, frames per second, duration, mode, and output**:
 ```
-timecut index.html --viewport 800,600 --fps 60 --duration 5 --frame-cache --pix-fmt yuv420p --output video.mp4
+timecut index.html --viewport 800,600 --fps 60 --duration 5 \
+  --frame-cache --pix-fmt yuv420p --output video.mp4
 ```
 Equivalent to the current default `timecut` invocation, but with explicit options. Opens `index.html` in the current working directory, sets the viewport to 800x600, captures at 60 frames per second for 5 virtual seconds (temporarily saving each frame), and saves the resulting movie using the pixel format `yuv420p` as `video.mp4`.
 
@@ -113,6 +114,8 @@ Opens https://tungs.github.io/truchet-tiles-original/ with the appropriate fragm
     * Width of capture, in pixels.
 * <a name="cli-options-height" href="#cli-options-height">#</a> Height: `-H`, `--height` *pixels*
     * Height of capture, in pixels.
+* <a name="cli-options-transparent-background" href="#cli-options-transparent-background">#</a> Transparent Background: `--transparent-background`
+    * Allows background to be transparent if there is no background styling. Only works if the output video format supports transparency.
 * <a name="cli-options-even-width" href="#cli-options-width">#</a> Even Width: `--even-width`
     * Rounds width up to the nearest even number.
 * <a name="cli-options-left" href="#cli-options-left">#</a> Left: `-l`, `--left` *pixels*
@@ -183,6 +186,7 @@ There are a few options for the Node API that are not accessible through the com
     * <a name="js-config-y-offset" href="#js-config-y-offset">#</a> `yOffset` &lt;[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)&gt; Y offset of capture, in pixels (default: 0).
     * <a name="js-config-width" href="#js-config-width">#</a> `width` &lt;[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)&gt; Width of capture, in pixels.
     * <a name="js-config-height" href="#js-config-height">#</a> `height` &lt;[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)&gt; Height of capture, in pixels.
+    * <a name="js-config-transparent-background" href="#js-config-transparent-background">#</a> `transparentBackground` &lt;[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type)&gt; Allows background to be transparent if there is no background styling. Only works if the output video format supports transparency.
     * <a name="js-config-even-width" href="#js-config-even-width">#</a> `evenWidth` &lt;[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type)&gt; Rounds width up to the nearest even number.
     * <a name="js-config-left" href="#js-config-left">#</a> `left` &lt;[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)&gt; Left edge of capture, in pixels. Equivalent to `config.xOffset`.
     * <a name="js-config-right" href="#js-config-right">#</a> `right` &lt;[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)&gt; Right edge of capture, in pixels. Ignored if `width` is specified.
