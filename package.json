@@ -1,0 +1,28 @@
+{
+  "name": "timecut",
+  "version": "0.0.1-prerelease",
+  "description": "",
+  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tungs/timecut"
+  },
+  "engines": {
+    "node": ">=6.4.0"
+  },
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint *.js"
+  },
+  "bin": {
+    "timecut": "./cli.js"
+  },
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "commander": "^2.11.0",
+    "timesnap": "0.0.1-prerelease"
+  },
+  "devDependencies": {
+    "eslint": "^4.3.0"
+  }
+}
