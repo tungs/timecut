@@ -87,8 +87,8 @@ Opens `index.html` in the current working directory, sets the viewport to 800x60
 
 **<a name="cli-example-viewport-fps-duration-mode-output" href="#cli-example-viewport-fps-duration-mode-output">#</a> Setting viewport size, frames per second, duration, mode, and output**:
 ```
-timecut index.html --viewport 800,600 --fps 60 --duration 5 \
-  --frame-cache --pix-fmt yuv420p --output video.mp4
+timecut index.html --viewport=800,600 --fps=60 --duration 5 \
+  --frame-cache --pix-fmt=yuv420p --output=video.mp4
 ```
 Equivalent to the current default `timecut` invocation, but with explicit options. Opens `index.html` in the current working directory, sets the viewport to 800x600, captures at 60 frames per second for 5 virtual seconds (temporarily saving each frame), and saves the resulting movie using the pixel format `yuv420p` as `video.mp4`.
 
@@ -102,8 +102,8 @@ Opens `drawing.html` in the current working directory, crops each frame to the b
 ```
 timecut "https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=random" \ 
   -S "#container" \ 
-  --left 20 --top 40 --right 6 --bottom 30 \
-  --duration 20
+  --left=20 --top=40 --right=6 --bottom=30 \
+  --duration=20
 ```
 Opens https://tungs.github.io/truchet-tiles-original/ with the appropriate fragment url (note the quotes in the url and selector are necessary because of the `#` and `&`). Crops each frame to the `#container` element, with an additional crop of 20px, 40px, 6px, and 30px for the left, top, right, and bottom, respectively. Captures frames for 20 virtual seconds at 60fps to `video.mp4`.
 
