@@ -2,7 +2,7 @@
 
 **timecut** is a Node.js program that records smooth movies of webpages. It uses **[timesnap](https://github.com/tungs/timesnap)** and [puppeteer](https://github.com/GoogleChrome/puppeteer) to open a webpage, overwrite its time-handling functions, and takes snapshots of the webpage, and passes the results to ffmpeg to encode those frames into a movie. This allows for slower-than-realtime and/or virtual high-fps capture of frames, while the resulting movie is smooth.
 
-**timecut** requires ffmpeg to be installed. **timecut** can be run from the command line or as a Node.js library.
+**timecut** requires ffmpeg to be installed. **timecut** can be run from the command line or as a Node.js library. It requires Node v6.4.0 or higher and npm to be installed.
 
 ## <a name="limitations" href="#limitations">#</a> **timecut** and **timesnap** Limitations
 **timesnap** (and **timecut** by extension) only overwrites JavaScript functions, so pages where changes occur via other means (e.g. through video or transitions/animations from css rules) will likely not render as intended.
@@ -29,6 +29,8 @@
 
 ### <a name="cli-global-install" href="#cli-global-install">#</a> Global Install and Use
 
+To Install:
+
 Due to [an issue in puppeteer](https://github.com/GoogleChrome/puppeteer/issues/375) with permissions, timecut is not supported for global installation for root. You can configure `npm` to install global packages for a specific user following this guide: https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-two-change-npms-default-directory
 
 After configuring, to install, run:
@@ -42,6 +44,9 @@ timecut "url" [options]
 ```
 
 ### <a name="cli-local-install" href="#cli-local-install">#</a> Local Install and Use
+
+To Install:
+
 ```
 cd /path/to/installation/directory
 npm install timecut
@@ -50,6 +55,23 @@ npm install timecut
 To use:
 ```
 node /path/to/installation/directory/node_modules/timecut/cli.js "url" [options]
+```
+
+*Alternatively*:
+
+To Install:
+
+
+```
+cd /path/to/installation/directory
+git clone https://github.com/tungs/timecut.git
+cd timecut
+npm install
+```
+
+To use:
+```
+node /path/to/installation/directory/timecut/cli.js "url" [options]
 ```
 
 ### <a name="cli-url-use" href="#cli-url-use">#</a> Command Line *url*
@@ -118,6 +140,8 @@ Opens https://tungs.github.io/truchet-tiles-original/ with the appropriate fragm
     * Allows background to be transparent if there is no background styling. Only works if the output video format supports transparency.
 * <a name="cli-options-even-width" href="#cli-options-width">#</a> Even Width: `--even-width`
     * Rounds width up to the nearest even number.
+* <a name="cli-options-even-height" href="#cli-options-height">#</a> Even Height: `--even-height`
+    * Rounds height up to the nearest even number.
 * <a name="cli-options-left" href="#cli-options-left">#</a> Left: `-l`, `--left` *pixels*
     * Left edge of capture, in pixels. Equivalent to `--x-offset`.
 * <a name="cli-options-right" href="#cli-options-right">#</a> Right: `-r`, `--right` *pixels*
@@ -135,9 +159,9 @@ Opens https://tungs.github.io/truchet-tiles-original/ with the appropriate fragm
     * Pixel Format for output video (default: `yuv420p`).
 * <a name="cli-options-pixel-format" href="#cli-options-pixel-format">#</a> Pixel Format: `--pix-fmt` *pixel format*
     * Pixel Format for output video (default: `yuv420p`).
-* <a name="cli-options-version" href="#cli-options-version">#</a> Version: `v`, `--version`
+* <a name="cli-options-version" href="#cli-options-version">#</a> Version: `-v`, `--version`
     * Display version information. Immediately exits.
-* <a name="cli-options-help" href="#cli-options-help">#</a> Help: `h`, `--help`
+* <a name="cli-options-help" href="#cli-options-help">#</a> Help: `-h`, `--help`
     * Display command line options. Immediately exits.
 
 ## <a name="node-use" href="#node-use">#</a> From Node.js
@@ -188,6 +212,7 @@ There are a few options for the Node API that are not accessible through the com
     * <a name="js-config-height" href="#js-config-height">#</a> `height` &lt;[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)&gt; Height of capture, in pixels.
     * <a name="js-config-transparent-background" href="#js-config-transparent-background">#</a> `transparentBackground` &lt;[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type)&gt; Allows background to be transparent if there is no background styling. Only works if the output video format supports transparency.
     * <a name="js-config-even-width" href="#js-config-even-width">#</a> `evenWidth` &lt;[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type)&gt; Rounds width up to the nearest even number.
+    * <a name="js-config-even-height" href="#js-config-even-height">#</a> `evenHeight` &lt;[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type)&gt; Rounds height up to the nearest even number.
     * <a name="js-config-left" href="#js-config-left">#</a> `left` &lt;[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)&gt; Left edge of capture, in pixels. Equivalent to `config.xOffset`.
     * <a name="js-config-right" href="#js-config-right">#</a> `right` &lt;[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)&gt; Right edge of capture, in pixels. Ignored if `width` is specified.
     * <a name="js-config-top" href="#js-config-top">#</a> `top` &lt;[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)&gt; Top edge of capture, in pixels. Equivalent to `config.yOffset`.
@@ -201,6 +226,6 @@ There are a few options for the Node API that are not accessible through the com
 * <a name="js-api-return" href="#js-api-return">#</a> returns: &lt;[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&gt; resolves after all the frames have been captured.
 
 ## <a name="how-it-works" href="#how-it-works">#</a> How it works
-**timecut** uses **[timesnap](https://github.com/tungs/timesnap)** to record frames to send to `ffmpeg`. **timesnap** uses puppeteer's `page.evaluateOnNewDocument` feature to automatically overwrite a page's native time-handling JavaScript functions (`new Date().getTime()`, `Date.now`, `performance.now`, `requestAnimationFrame`, `setTimeout`, `setInterval`, `cancelAnimationFrame`, `cancelTimeout`, and `cancelInterval`) to custom ones that use a virtual timeline. Events, allowing for any computation to complete before taking a screenshot.
+**timecut** uses **[timesnap](https://github.com/tungs/timesnap)** to record frames to send to `ffmpeg`. **timesnap** uses puppeteer's `page.evaluateOnNewDocument` feature to automatically overwrite a page's native time-handling JavaScript functions (`new Date().getTime()`, `Date.now`, `performance.now`, `requestAnimationFrame`, `setTimeout`, `setInterval`, `cancelAnimationFrame`, `cancelTimeout`, and `cancelInterval`) to custom ones that use a virtual timeline, allowing for any computation to complete before taking a screenshot.
 
 This work was inspired by [a talk by Noah Veltman](https://github.com/veltman/d3-unconf), who described manually altering a document's `Date.now` and `performance.now` functions and using `puppeteer` to change time and take snapshots. 

@@ -49,6 +49,7 @@ commander
   })
   .option('--transparent-background', 'Allow transparent backgrounds (only works for certain encodings)')
   .option('--even-width', 'Rounds capture width up to the nearest even number')
+  .option('--even-height', 'Rounds capture height up to the nearest even number')
   .option('-f, --frame-cache [directory]', 'Save frames in a temporary directory before processing')
   .option('-e, --input-options <options>', 'Extra arguments for ffmpeg input', function (str) {
     // TODO: make a more sophisticated parser for options that can handle quote marks
@@ -73,5 +74,5 @@ commander
   .option('-q, --quiet', 'Suppress console logging')
   .parse(commanderArgs);
 
-commander.url = commander.args[0];
+commander.url = commander.args[0] || 'index.html';
 recorder(commander);
