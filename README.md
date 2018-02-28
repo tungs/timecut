@@ -1,6 +1,6 @@
 # timecut
 
-**timecut** is a Node.js program that records smooth videos of web pages that use JavaScript animations. It uses **[timesnap](https://github.com/tungs/timesnap)** and [puppeteer](https://github.com/GoogleChrome/puppeteer) to open a web page, overwrite its time-handling functions, takes snapshots of the web page, and passes the results to ffmpeg to encode those frames into a video. This allows for slower-than-realtime and/or virtual high-fps capture of frames, while the resulting video is smooth.
+**timecut** is a Node.js program that records smooth videos of web pages that use JavaScript animations. It uses **[timesnap](https://github.com/tungs/timesnap)** and [puppeteer](https://github.com/GoogleChrome/puppeteer) to open a web page, overwrite its time-handling functions, take snapshots of the web page, and then passes the results to ffmpeg to encode those frames into a video. This allows for slower-than-realtime and/or virtual high-fps capture of frames, while the resulting video is smooth.
 
 You can run **timecut** from the command line or as a Node.js library. It requires ffmpeg, Node v6.4.0 or higher, and npm.
 
@@ -11,8 +11,8 @@ To only record screenshots and save them as pictures, see **[timesnap](https://g
 
 ## <a name="modes" href="#modes">#</a> **timecut** Modes
 **timecut** can pass frames to ffmpeg using one of two modes:
-  * <a name="cache-frame-mode" href="#cache-frame-mode">#</a> **Cache frame mode** stores each frame temporarily before running ffmpeg on all of the images. This mode can use a lot of temporary space (multiple gigabytes per second of recorded time), but takes up less memory, and it is more stable than [pipe mode](#pipe-mode). This is currently enabled by default, though it may change in the future. To explicitly use this mode, use the `--frame-cache` option from the command line or set `config.frameCache` from Node.js.
-  * <a name="pipe-mode" href="#pipe-mode">#</a> **Pipe mode** (experimental) pipes each frame directly to `ffmpeg`, without saving each frame. This takes up less temporary space than [cache frame mode](#cache-frame-mode), but it currently has some observed stability issues. To use this mode, use the `--pipe-mode` option from the command line or set `config.pipeCache` to `true` frome Node.js. If you run into issues, you may want to try [cache frame mode](#cache-frame-mode) or to install and use **timesnap** and [pipe it directly to ffmpeg](https://github.com/tungs/timesnap#cli-example-piping). Both alternative implementations seem more stable than the current pipe mode.
+  * <a name="cache-frame-mode" href="#cache-frame-mode">#</a> **Cache frame mode** stores each frame temporarily before running ffmpeg on all of the images. This mode can use a lot of temporary disk space (hundreds of megabytes per second of recorded time), but takes up less memory and is more stable than [pipe mode](#pipe-mode). This is currently enabled by default, though it may change in the future. To explicitly use this mode, [use the `--frame-cache` option from the command line](#cli-options-frame-cache) or [set `config.frameCache` from Node.js](#js-config-frame-cache) to `true` or to a directory name.
+  * <a name="pipe-mode" href="#pipe-mode">#</a> **Pipe mode** (experimental) pipes each frame directly to `ffmpeg`, without saving each frame. This takes up less temporary space than [cache frame mode](#cache-frame-mode), but it currently has some observed stability issues. To use this mode, [use the `--pipe-mode` option from the command line](#cli-options-pipe-mode) or [set `config.pipeCache` to `true` frome Node.js](#js-config-pipe-mode). If you run into issues, you may want to try [cache frame mode](#cache-frame-mode) or to install and use **timesnap** and [pipe it directly to ffmpeg](https://github.com/tungs/timesnap#cli-example-piping). Both alternative implementations seem more stable than the current pipe mode.
 
 ## Read Me Contents
 
@@ -108,7 +108,7 @@ timecut "https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchSty
   --left=20 --top=40 --right=6 --bottom=30 \
   --duration=20
 ```
-Opens https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=random with the appropriate fragment url (note the quotes in the url and selector are necessary because of the `#` and `&`). Crops each frame to the `#container` element, with an additional crop of 20px, 40px, 6px, and 30px for the left, top, right, and bottom, respectively. Captures frames for 20 virtual seconds at 60fps to `video.mp4` in the current working directory.
+Opens https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=random (note the quotes in the url and selector are necessary because of the `#` and `&`). Crops each frame to the `#container` element, with an additional crop of 20px, 40px, 6px, and 30px for the left, top, right, and bottom, respectively. Captures frames for 20 virtual seconds at 60fps to `video.mp4` in the current working directory.
 
 ### <a name="cli-options" href="#cli-options">#</a> Command Line *options*
 * <a name="cli-options-output" href="#cli-options-output">#</a> Output: `-O`, `--output` *name*
@@ -243,8 +243,8 @@ The Node API is structured similarly to the command line options.
     * <a name="js-config-frame-cache" href="#js-config-frame-cache">#</a> `frameCache` &lt;[string][]|[boolean][]&gt; Saves each frame temporarily to disk before ffmpeg processes it. If `config.frameCache` is a string, uses that as the directory to save the temporary files. If `config.frameCache` is a boolean `true`, temporarily creates a directory in the current working directory. See [cache frame mode](#cache-frame-mode).
     * <a name="js-config-pipe-mode" href="#js-config-pipe-mode">#</a> `pipeMode` &lt;[boolean][]&gt; Experimental. If set to `true`, pipes frames directly to ffmpeg, without saving to disk. See [pipe mode](#pipe-mode).
     * <a name="js-config-viewport" href="#js-config-viewport">#</a> `viewport` &lt;[Object][]&gt;
-        * <a name="js-config-viewport-width" href="#js-config-viewport-width">#</a> `width` &lt;[number][]&gt; Width of viewport, in pixels (default `800`).
-        * <a name="js-config-viewport-height" href="#js-config-viewport-height">#</a> `height` &lt;[number][]&gt; Height of viewport, in pixels (default `600`).
+        * <a name="js-config-viewport-width" href="#js-config-viewport-width">#</a> `width` &lt;[number][]&gt; Width of viewport, in pixels (default: `800`).
+        * <a name="js-config-viewport-height" href="#js-config-viewport-height">#</a> `height` &lt;[number][]&gt; Height of viewport, in pixels (default: `600`).
         * <a name="js-config-viewport-scale-factor" href="#js-config-viewport-scale-factor">#</a> `deviceScaleFactor` &lt;[number][]&gt; Device scale factor (default: `1`).
         * <a name="js-config-viewport-mobile" href="#js-config-viewport-mobile">#</a> `isMobile` &lt;[boolean][]&gt; Specifies whether the `meta viewport` tag should be used (default: `false`).
         * <a name="js-config-viewport-touch" href="#js-config-viewport-touch">#</a> `hasTouch` &lt;[boolean][]&gt; Specifies whether the viewport supports touch (default: `false`).
