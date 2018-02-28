@@ -12,7 +12,7 @@ To only record screenshots and save them as pictures, see **[timesnap](https://g
 ## <a name="modes" href="#modes">#</a> **timecut** Modes
 **timecut** can pass frames to ffmpeg using one of two modes:
   * <a name="cache-frame-mode" href="#cache-frame-mode">#</a> **Cache frame mode** stores each frame temporarily before running ffmpeg on all of the images. This mode can use a lot of temporary disk space (hundreds of megabytes per second of recorded time), but takes up less memory and is more stable than [pipe mode](#pipe-mode). This is currently enabled by default, though it may change in the future. To explicitly use this mode, [use the `--frame-cache` option from the command line](#cli-options-frame-cache) or [set `config.frameCache` from Node.js](#js-config-frame-cache) to `true` or to a directory name.
-  * <a name="pipe-mode" href="#pipe-mode">#</a> **Pipe mode** (experimental) pipes each frame directly to `ffmpeg`, without saving each frame. This takes up less temporary space than [cache frame mode](#cache-frame-mode), but it currently has some observed stability issues. To use this mode, [use the `--pipe-mode` option from the command line](#cli-options-pipe-mode) or [set `config.pipeCache` to `true` frome Node.js](#js-config-pipe-mode). If you run into issues, you may want to try [cache frame mode](#cache-frame-mode) or to install and use **timesnap** and [pipe it directly to ffmpeg](https://github.com/tungs/timesnap#cli-example-piping). Both alternative implementations seem more stable than the current pipe mode.
+  * <a name="pipe-mode" href="#pipe-mode">#</a> **Pipe mode** (experimental) pipes each frame directly to `ffmpeg`, without saving each frame. This takes up less temporary space than [cache frame mode](#cache-frame-mode), but it currently has some observed stability issues. To use this mode, [use the `--pipe-mode` option from the command line](#cli-options-pipe-mode) or [set `config.pipeCache` to `true` from Node.js](#js-config-pipe-mode). If you run into issues, you may want to try [cache frame mode](#cache-frame-mode) or to install and use **timesnap** and [pipe it directly to ffmpeg](https://github.com/tungs/timesnap#cli-example-piping). Both alternative implementations seem more stable than the current pipe mode.
 
 ## Read Me Contents
 
@@ -78,7 +78,7 @@ node /path/to/installation/directory/timecut/cli.js "url" [options]
 ```
 
 ### <a name="cli-url-use" href="#cli-url-use">#</a> Command Line *url*
-The url can be a web url (e.g. `https://github.com`) or a file path, with relative paths resolving to the current working directory. If no url is specified, defaults to `index.html`. Remember to enclose urls that contain special characters (like `#` and `&`) with quotes.
+The url can be a web url (e.g. `https://github.com`) or a file path, with relative paths resolving in the current working directory. If no url is specified, defaults to `index.html`. Remember to enclose urls that contain special characters (like `#` and `&`) with quotes.
 
 ### <a name="cli-examples" href="#cli-examples">#</a> Command Line Examples
 
@@ -160,7 +160,7 @@ Opens https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=
 * <a name="cli-options-extra-output-options" href="#cli-options-extra-output-options">#</a> Extra output options: `-E`, `--input-options` *options*
     * Extra arguments for ffmpeg output, enclosed in quotes. Example: `--output-options="-vf scale=320:240"`
 * <a name="cli-options-pixel-format" href="#cli-options-pixel-format">#</a> Pixel Format: `--pix-fmt` *pixel format*
-    * Pixel Format for output video (default: `yuv420p`).
+    * Pixel format for output video (default: `yuv420p`).
 * <a name="cli-options-version" href="#cli-options-version">#</a> Version: `-v`, `--version`
     * Displays version information. Immediately exits.
 * <a name="cli-options-help" href="#cli-options-help">#</a> Help: `-h`, `--help`
@@ -234,7 +234,7 @@ The Node API is structured similarly to the command line options.
 
 **timecut(config)**
 *  <a name="js-api-config" href="#js-api-config">#</a> `config` &lt;[Object][]&gt;
-    * <a name="js-config-url" href="#js-config-url">#</a> `url` &lt;[string][]&gt; The url to load. It can be a web url, like `https://github.com` or a file path, with relative paths resolving to the current working directory (default: `index.html`).
+    * <a name="js-config-url" href="#js-config-url">#</a> `url` &lt;[string][]&gt; The url to load. It can be a web url, like `https://github.com` or a file path, with relative paths resolving in the current working directory (default: `index.html`).
     * <a name="js-config-output" href="#js-config-output">#</a> `output` &lt;[string][]&gt; Tells ffmpeg to save the video as *name*.  Its file extension determines encoding if not explicitly specified. Default name: `video.mp4`.
     * <a name="js-config-fps" href="#js-config-fps">#</a> `fps` &lt;[number][]&gt; frame rate, in frames per virtual second, of capture (default: `60`).
     * <a name="js-config-duration" href="#js-config-duration">#</a> `duration` &lt;[number][]&gt; Duration of capture, in seconds (default: `5`).
