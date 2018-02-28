@@ -1,8 +1,8 @@
 # timecut
 
-**timecut** is a Node.js program that records smooth movies of web pages that use JavaScript animations. It uses **[timesnap](https://github.com/tungs/timesnap)** and [puppeteer](https://github.com/GoogleChrome/puppeteer) to open a webpage, overwrite its time-handling functions, and takes snapshots of the webpage, and passes the results to ffmpeg to encode those frames into a movie. This allows for slower-than-realtime and/or virtual high-fps capture of frames, while the resulting movie is smooth.
+**timecut** is a Node.js program that records smooth videos of web pages that use JavaScript animations. It uses **[timesnap](https://github.com/tungs/timesnap)** and [puppeteer](https://github.com/GoogleChrome/puppeteer) to open a web page, overwrite its time-handling functions, takes snapshots of the web page, and passes the results to ffmpeg to encode those frames into a video. This allows for slower-than-realtime and/or virtual high-fps capture of frames, while the resulting video is smooth.
 
-**timecut** requires ffmpeg, Node v6.4.0 or higher, and npm to be installed. **timecut** can be run from the command line or as a Node.js library.
+You can run **timecut** from the command line or as a Node.js library. It requires ffmpeg, Node v6.4.0 or higher, and npm.
 
 To only record screenshots and save them as pictures, see **[timesnap](https://github.com/tungs/timesnap)**.
 
@@ -10,9 +10,9 @@ To only record screenshots and save them as pictures, see **[timesnap](https://g
 **timesnap** (and **timecut** by extension) only overwrites JavaScript functions, so pages where changes occur via other means (e.g. through video or transitions/animations from CSS rules) will likely not render as intended.
 
 ## <a name="modes" href="#modes">#</a> **timecut** Modes
-**timecut** can pass frames to ffmpeg using one of two methods:
-  * <a name="cache-frame-mode" href="#cache-frame-mode">#</a> **Cache frame mode** stores each frame temporarily in the working directory, before running ffmpeg on all of the images. This mode can use a lot of temporary space (multiple gigabytes per second of recorded time), but takes up less memory, and it is more stable than **pipe mode**. This is currently enabled by default, though it may change in the future. To explicitly use this in case of the default mode changing, use the `--frame-cache` option from the command line or setting `config.frameCache` to true when using it as a Node.js library.
-  * <a name="pipe-mode" href="#pipe-mode">#</a> **Pipe mode** (experimental) pipes each frame directly to `ffmpeg`, without saving each frame. This takes up less temporary space than *cache frame mode*, but it currently has some observed stability issues. To use this mode, use the `--pipe-mode` option from the command line or setting `config.pipeCache` to true when using it as a Node.js library. If you run into issues, you may want to use [cache frame mode](#cache-frame-mode), or install and use **timesnap** and [pipe it directly to ffmpeg](https://github.com/tungs/timesnap#cli-example-piping). Both alternative implementations seem more stable than the current pipe mode.
+**timecut** can pass frames to ffmpeg using one of two modes:
+  * <a name="cache-frame-mode" href="#cache-frame-mode">#</a> **Cache frame mode** stores each frame temporarily before running ffmpeg on all of the images. This mode can use a lot of temporary space (multiple gigabytes per second of recorded time), but takes up less memory, and it is more stable than [pipe mode](#pipe-mode). This is currently enabled by default, though it may change in the future. To explicitly use this mode, use the `--frame-cache` option from the command line or set `config.frameCache` from Node.js.
+  * <a name="pipe-mode" href="#pipe-mode">#</a> **Pipe mode** (experimental) pipes each frame directly to `ffmpeg`, without saving each frame. This takes up less temporary space than [cache frame mode](#cache-frame-mode), but it currently has some observed stability issues. To use this mode, use the `--pipe-mode` option from the command line or set `config.pipeCache` to `true` frome Node.js. If you run into issues, you may want to try [cache frame mode](#cache-frame-mode) or to install and use **timesnap** and [pipe it directly to ffmpeg](https://github.com/tungs/timesnap#cli-example-piping). Both alternative implementations seem more stable than the current pipe mode.
 
 ## Read Me Contents
 
@@ -78,7 +78,7 @@ node /path/to/installation/directory/timecut/cli.js "url" [options]
 ```
 
 ### <a name="cli-url-use" href="#cli-url-use">#</a> Command Line *url*
-The url can be a web url (e.g. `https://github.com`) or a relative path to the current working directory (e.g. `index.html`). If no url is specified, defaults to `index.html`. For urls with special characters (like `#` and `&`), enclose the urls with quotes.
+The url can be a web url (e.g. `https://github.com`) or a file path, with relative paths resolving to the current working directory. If no url is specified, defaults to `index.html`. Remember to enclose urls that contain special characters (like `#` and `&`) with quotes.
 
 ### <a name="cli-examples" href="#cli-examples">#</a> Command Line Examples
 
@@ -93,7 +93,7 @@ Opens `index.html` in the current working directory, sets the viewport to 800x60
 timecut index.html --viewport=800,600 --fps=60 --duration=5 \
   --frame-cache --pix-fmt=yuv420p --output=video.mp4
 ```
-Equivalent to the current default `timecut` invocation, but with explicit options. Opens `index.html` in the current working directory, sets the viewport to 800x600, captures at 60 frames per second for 5 virtual seconds (temporarily saving each frame), and saves the resulting movie using the pixel format `yuv420p` as `video.mp4`.
+Equivalent to the current default `timecut` invocation, but with explicit options. Opens `index.html` in the current working directory, sets the viewport to 800x600, captures at 60 frames per second for 5 virtual seconds (temporarily saving each frame), and saves the resulting video using the pixel format `yuv420p` as `video.mp4`.
 
 **<a name="cli-example-selector" href="#cli-example-selector">#</a> Using a selector**:
 ```
@@ -108,13 +108,13 @@ timecut "https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchSty
   --left=20 --top=40 --right=6 --bottom=30 \
   --duration=20
 ```
-Opens https://tungs.github.io/truchet-tiles-original/ with the appropriate fragment url (note the quotes in the url and selector are necessary because of the `#` and `&`). Crops each frame to the `#container` element, with an additional crop of 20px, 40px, 6px, and 30px for the left, top, right, and bottom, respectively. Captures frames for 20 virtual seconds at 60fps to `video.mp4`.
+Opens https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=random with the appropriate fragment url (note the quotes in the url and selector are necessary because of the `#` and `&`). Crops each frame to the `#container` element, with an additional crop of 20px, 40px, 6px, and 30px for the left, top, right, and bottom, respectively. Captures frames for 20 virtual seconds at 60fps to `video.mp4` in the current working directory.
 
 ### <a name="cli-options" href="#cli-options">#</a> Command Line *options*
 * <a name="cli-options-output" href="#cli-options-output">#</a> Output: `-O`, `--output` *name*
-    * Tells ffmpeg to save the video as *name*. File extension is used to choose encoding.
+    * Tells ffmpeg to save the video as *name*. Its file extension determines encoding if not explicitly specified.
 * <a name="cli-options-fps" href="#cli-options-fps">#</a> Frame Rate: `-R`, `--fps` *frame rate*
-    * *frame rate* (in frames per virtual second) of capture (default: `60`).
+    * Frame rate (in frames per virtual second) of capture (default: `60`).
 * <a name="cli-options-duration" href="#cli-options-duration">#</a> Duration: `-d`, `--duration` *seconds*
     * Duration of capture, in *seconds* (default: `5`).
 * <a name="cli-options-frames" href="#cli-options-frames">#</a> Frames: `--frames` *count*
@@ -127,8 +127,6 @@ Opens https://tungs.github.io/truchet-tiles-original/ with the appropriate fragm
     * Saves each frame temporarily to disk before ffmpeg processes it. If *directory* is not specified, temporarily creates one in the current working directory. Enabled by default. See [cache frame mode](#cache-frame-mode).
 * <a name="cli-options-pipe-mode" href="#cli-options-pipe-mode">#</a> Pipe Mode: `--pipe-mode`
     * Experimental. Pipes frames directly to ffmpeg, without saving to disk. See [pipe mode](#pipe-mode).
-* <a name="cli-options-viewport" href="#cli-options-viewport">#</a> Viewport: `-V`, `--viewport` *dimensions*
-    * Viewport dimensions, in pixels. For example `800` (for width) or `800,600` (for width and height).
 * <a name="cli-options-start" href="#cli-options-start">#</a> Start: `-s`, `--start` *n seconds*
     * Runs code for n virtual seconds before saving any frames (default: `0`).
 * <a name="cli-options-x-offset" href="#cli-options-x-offset">#</a> X Offset: `-x`, `--x-offset` *pixels*
@@ -139,12 +137,12 @@ Opens https://tungs.github.io/truchet-tiles-original/ with the appropriate fragm
     * Width of capture, in pixels.
 * <a name="cli-options-height" href="#cli-options-height">#</a> Height: `-H`, `--height` *pixels*
     * Height of capture, in pixels.
-* <a name="cli-options-transparent-background" href="#cli-options-transparent-background">#</a> Transparent Background: `--transparent-background`
-    * Allows background to be transparent if there is no background styling. Only works if the output video format supports transparency.
 * <a name="cli-options-even-width" href="#cli-options-width">#</a> Even Width: `--even-width`
     * Rounds width up to the nearest even number.
 * <a name="cli-options-even-height" href="#cli-options-height">#</a> Even Height: `--even-height`
     * Rounds height up to the nearest even number.
+* <a name="cli-options-transparent-background" href="#cli-options-transparent-background">#</a> Transparent Background: `--transparent-background`
+    * Allows background to be transparent if there is no background styling. Only works if the output video format supports transparency.
 * <a name="cli-options-left" href="#cli-options-left">#</a> Left: `-l`, `--left` *pixels*
     * Left edge of capture, in pixels. Equivalent to `--x-offset`.
 * <a name="cli-options-right" href="#cli-options-right">#</a> Right: `-r`, `--right` *pixels*
@@ -153,7 +151,7 @@ Opens https://tungs.github.io/truchet-tiles-original/ with the appropriate fragm
     * Top edge of capture, in pixels. Equivalent to `--y-offset`.
 * <a name="cli-options-bottom" href="#cli-options-bottom">#</a> Bottom: `-b`, `--bottom` *pixels*
     * Bottom edge of capture, in pixels. Ignored if `height` is specified.
-* <a name="cli-options-load-delay" href="#cli-options-load-delay">#</a> Load Delay: `--load-delay` *n seconds*
+* <a name="cli-options-start-delay" href="#cli-options-start-delay">#</a> Start Delay: `--start-delay` *n seconds*
     * Waits *n real seconds* after loading the page before starting to capture.
 * <a name="cli-options-quiet" href="#cli-options-quiet">#</a> Quiet: `-q`, `--quiet`
     * Suppresses console logging.
@@ -192,7 +190,7 @@ timecut({
   right: 6, bottom: 30,       // and the right by 6px, and the bottom by 30px
   fps: 30,                    // saves 30 frames for each virtual second
   duration: 20,               // for 20 virtual seconds 
-  output: 'video.mp4'         // video.mp4 of the current working directory
+  output: 'video.mp4'         // to video.mp4 of the current working directory
 }).then(function () {
   console.log('Done!');
 });
@@ -232,21 +230,21 @@ var pages = [
 
 ### <a name="node-api" href="#node-api">#</a> Node API
 
-There are a few options for the Node API that are not accessible through the command line interface: `config.logToStdErr`
+The Node API is structured similarly to the command line options.
 
 **timecut(config)**
 *  <a name="js-api-config" href="#js-api-config">#</a> `config` &lt;[Object][]&gt;
-    * <a name="js-config-url" href="#js-config-url">#</a> `url` &lt;[string][]&gt; The url to load. It can be a web url, like `https://github.com` or a relative path to the current working directory, like `index.html` (default: `index.html`).
-    * <a name="js-config-output" href="#js-config-output">#</a> `output` &lt;[string][]&gt; Tells ffmpeg to save the video as *name*. File extension is used to choose encoding. (default: `video.mp4`)
+    * <a name="js-config-url" href="#js-config-url">#</a> `url` &lt;[string][]&gt; The url to load. It can be a web url, like `https://github.com` or a file path, with relative paths resolving to the current working directory (default: `index.html`).
+    * <a name="js-config-output" href="#js-config-output">#</a> `output` &lt;[string][]&gt; Tells ffmpeg to save the video as *name*.  Its file extension determines encoding if not explicitly specified. Default name: `video.mp4`.
     * <a name="js-config-fps" href="#js-config-fps">#</a> `fps` &lt;[number][]&gt; frame rate, in frames per virtual second, of capture (default: `60`).
     * <a name="js-config-duration" href="#js-config-duration">#</a> `duration` &lt;[number][]&gt; Duration of capture, in seconds (default: `5`).
     * <a name="js-config-frames" href="#js-config-frames">#</a> `frames` &lt;[number][]&gt; Number of frames to capture. Overrides default fps or default duration.
-    * <a name="js-config-selector" href="#js-config-selector">#</a> `selector` &lt;[string][]&gt; [CSS selector](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) of item to capture.
+    * <a name="js-config-selector" href="#js-config-selector">#</a> `selector` &lt;[string][]&gt; Crops each frame to the bounding box of the first item found by the specified [CSS selector][].
     * <a name="js-config-frame-cache" href="#js-config-frame-cache">#</a> `frameCache` &lt;[string][]|[boolean][]&gt; Saves each frame temporarily to disk before ffmpeg processes it. If `config.frameCache` is a string, uses that as the directory to save the temporary files. If `config.frameCache` is a boolean `true`, temporarily creates a directory in the current working directory. See [cache frame mode](#cache-frame-mode).
     * <a name="js-config-pipe-mode" href="#js-config-pipe-mode">#</a> `pipeMode` &lt;[boolean][]&gt; Experimental. If set to `true`, pipes frames directly to ffmpeg, without saving to disk. See [pipe mode](#pipe-mode).
     * <a name="js-config-viewport" href="#js-config-viewport">#</a> `viewport` &lt;[Object][]&gt;
-        * <a name="js-config-viewport-width" href="#js-config-viewport-width">#</a> `width` &lt;[number][]&gt; Width of viewport.
-        * <a name="js-config-viewport-height" href="#js-config-viewport-height">#</a> `height` &lt;[number][]&gt; Height of viewport.
+        * <a name="js-config-viewport-width" href="#js-config-viewport-width">#</a> `width` &lt;[number][]&gt; Width of viewport, in pixels (default `800`).
+        * <a name="js-config-viewport-height" href="#js-config-viewport-height">#</a> `height` &lt;[number][]&gt; Height of viewport, in pixels (default `600`).
         * <a name="js-config-viewport-scale-factor" href="#js-config-viewport-scale-factor">#</a> `deviceScaleFactor` &lt;[number][]&gt; Device scale factor (default: `1`).
         * <a name="js-config-viewport-mobile" href="#js-config-viewport-mobile">#</a> `isMobile` &lt;[boolean][]&gt; Specifies whether the `meta viewport` tag should be used (default: `false`).
         * <a name="js-config-viewport-touch" href="#js-config-viewport-touch">#</a> `hasTouch` &lt;[boolean][]&gt; Specifies whether the viewport supports touch (default: `false`).
@@ -263,18 +261,18 @@ There are a few options for the Node API that are not accessible through the com
     * <a name="js-config-right" href="#js-config-right">#</a> `right` &lt;[number][]&gt; Right edge of capture, in pixels. Ignored if `config.width` is specified.
     * <a name="js-config-top" href="#js-config-top">#</a> `top` &lt;[number][]&gt; Top edge of capture, in pixels. Equivalent to `config.yOffset`.
     * <a name="js-config-bottom" href="#js-config-bottom">#</a> `bottom` &lt;[number][]&gt; Bottom edge of capture, in pixels. Ignored if `config.height` is specified.
-    * <a name="js-config-load-delay" href="#js-config-load-delay">#</a> `loadDelay` &lt;[number][]&gt; Waits `config.loadDelay` real seconds after loading (default: `0`).
+    * <a name="js-config-start-delay" href="#js-config-start-delay">#</a> `startDelay` &lt;[number][]&gt; Waits `config.loadDelay` real seconds after loading before starting (default: `0`).
     * <a name="js-config-quiet" href="#js-config-quiet">#</a> `quiet` &lt;[boolean][]&gt; Suppresses console logging.
     * <a name="js-config-input-options" href="#js-config-input-options">#</a> `inputOptions` &lt;[Array][] &lt;[string][]&gt;&gt; Extra arguments for ffmpeg input. Example: `['-framerate', '30']`
     * <a name="js-config-output-options" href="#js-config-output-options">#</a> `outputOptions` &lt;[Array][] &lt;[string][]&gt;&gt; Extra arguments for ffmpeg output. Example: `['-vf', 'scale=320:240']`
-    * <a name="js-config-pixel-format" href="#js-config-pixel-format">#</a> `pixelFormat` &lt;[string][]&gt; Pixel Format for output video (default: `yuv420p`).
+    * <a name="js-config-pixel-format" href="#js-config-pixel-format">#</a> `pixelFormat` &lt;[string][]&gt; Pixel format for output video (default: `yuv420p`).
     * <a name="js-config-log-to-std-err" href="#js-config-log-to-std-err">#</a> `logToStdErr` &lt;[boolean][]&gt; Logs to stderr instead of stdout. Doesn't do anything if `config.quiet` is set to true.
 * <a name="js-api-return" href="#js-api-return">#</a> returns: &lt;[Promise][]&gt; resolves after all the frames have been captured.
 
 ## <a name="how-it-works" href="#how-it-works">#</a> How it works
-**timecut** uses **[timesnap](https://github.com/tungs/timesnap)** to record frames to send to `ffmpeg`. **timesnap** uses puppeteer's `page.evaluateOnNewDocument` feature to automatically overwrite a page's native time-handling JavaScript functions and objects (`new Date()`, `Date.now`, `performance.now`, `requestAnimationFrame`, `setTimeout`, `setInterval`, `cancelAnimationFrame`, `cancelTimeout`, and `cancelInterval`) to custom ones that use a virtual timeline, allowing for any computation to complete before taking a screenshot.
+**timecut** uses **[timesnap](https://github.com/tungs/timesnap)** to record frames to send to `ffmpeg`. **timesnap** uses puppeteer's `page.evaluateOnNewDocument` feature to automatically overwrite a page's native time-handling JavaScript functions and objects (`new Date()`, `Date.now`, `performance.now`, `requestAnimationFrame`, `setTimeout`, `setInterval`, `cancelAnimationFrame`, `cancelTimeout`, and `cancelInterval`) to custom ones that use a virtual timeline, allowing for JavaScript computation to complete before taking a screenshot.
 
-This work was inspired by [a talk by Noah Veltman](https://github.com/veltman/d3-unconf), who described manually altering a document's `Date.now` and `performance.now` functions and using `puppeteer` to change time and take snapshots. 
+This work was inspired by [a talk by Noah Veltman](https://github.com/veltman/d3-unconf), who described altering a document's `Date.now` and `performance.now` functions to refer to a virtual time and using `puppeteer` to change that virtual time and take snapshots.
 
 [Object]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object
 [string]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type
