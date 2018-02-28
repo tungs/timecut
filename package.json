@@ -1,11 +1,13 @@
 {
   "name": "timecut",
   "version": "0.0.1-prerelease",
-  "description": "",
-  "author": "",
+  "description": "Record smooth movies of web pages",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tungs/timecut"
+    "url": "https://github.com/tungs/timecut.git"
+  },
+  "author": {
+    "name": "Steve Tung"
   },
   "engines": {
     "node": ">=6.4.0"
@@ -20,7 +22,7 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "commander": "^2.11.0",
-    "timesnap": "0.0.1-prerelease"
+    "timesnap": "0.0.1"
   },
   "devDependencies": {
     "eslint": "^4.3.0"

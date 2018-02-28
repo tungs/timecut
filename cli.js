@@ -41,7 +41,7 @@ commander
   .option('-O, --output <file name>', 'Name of output (default: video.mp4)')
   .option('-R, --fps <frame rate>', 'Frames per second to capture (default: 60)', parseFloat)
   .option('-d, --duration <seconds>', 'Duration of capture, in seconds (default: 5)', parseFloat)
-  .option('-f, --frames <count>', 'Number of frames to capture', parseInt)
+  .option('--frames <count>', 'Number of frames to capture', parseInt)
   .option('-S, --selector <selector>', 'CSS Selector of item to capture')
   .option('-V, --viewport <dimensions>', 'Viewport dimensions, in pixels (e.g. 800,600)', function (str) {
     var dims = str.split(',').map(function (d) { return parseInt(d); });
@@ -50,7 +50,7 @@ commander
   .option('--transparent-background', 'Allow transparent backgrounds (only works for certain encodings)')
   .option('--even-width', 'Rounds capture width up to the nearest even number')
   .option('--even-height', 'Rounds capture height up to the nearest even number')
-  .option('-f, --frame-cache [directory]', 'Save frames in a temporary directory before processing')
+  .option('--frame-cache [directory]', 'Save frames in a temporary directory before processing')
   .option('-e, --input-options <options>', 'Extra arguments for ffmpeg input', function (str) {
     // TODO: make a more sophisticated parser for options that can handle quote marks
     return str.split(' ');
@@ -60,7 +60,7 @@ commander
     return str.split(' ');
   })
   .option('-p, --pix-fmt <pixel format>', 'Pixel format of output (default: yuv420p)')
-  .option('-P, --pipe-mode', 'Pipe to ffmpeg (experimental)')
+  .option('-P, --pipe-mode', 'Pipe directly to ffmpeg (experimental)')
   .option('-s, --start <n seconds>', 'Runs code for n virtual seconds before saving any frames. [0]', parseFloat, 0)
   .option('-x, --x-offset <pixels>', 'X offset of capture, in pixels', parseFloat, 0)
   .option('-y, --y-offset <pixels>', 'Y offset of capture, in pixels', parseFloat, 0)
@@ -70,9 +70,9 @@ commander
   .option('-r, --right <pixels>', 'right edge of capture, in pixels', parseInt)
   .option('-t, --top <pixels>', 'top edge of capture, in pixels. Equivalent to --y-offset', parseInt)
   .option('-b, --bottom <pixels>', 'bottom edge of capture, in pixels', parseInt)
-  .option('--load-delay <n seconds>', 'Wait n real seconds after loading.', parseFloat, 0)
+  .option('--start-delay <n seconds>', 'Wait n real seconds after loading.', parseFloat, 0)
   .option('-q, --quiet', 'Suppress console logging')
-  .parse(commanderArgs);
+  .parse(process.argv);
 
 commander.url = commander.args[0] || 'index.html';
 recorder(commander);
