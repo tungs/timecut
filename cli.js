@@ -36,7 +36,7 @@ const commander = require('commander');
 const recorder = require('./index.js');
 
 commander
-  .version('0.0.1-post', '-v, --version')
+  .version('0.0.2-prerelease', '-v, --version')
   .usage('<url> [options]')
   .option('-O, --output <file name>', 'Name of output (default: video.mp4)')
   .option('-R, --fps <frame rate>', 'Frames per second to capture (default: 60)', parseFloat)
@@ -48,8 +48,8 @@ commander
     return dims.length > 1 ? { width: dims[0], height: dims[1] } : { width: dims[0] };
   })
   .option('--transparent-background', 'Allow transparent backgrounds (only works for certain encodings)')
-  .option('--even-width', 'Rounds capture width up to the nearest even number')
-  .option('--even-height', 'Rounds capture height up to the nearest even number')
+  .option('--no-round-to-even-width', 'Disables automatic rounding of capture width up to the nearest even number')
+  .option('--no-round-to-even-height', 'Disables automatic rounding of capture height up to the nearest even number')
   .option('--frame-cache [directory]', 'Save frames in a temporary directory before processing')
   .option('-e, --input-options <options>', 'Extra arguments for ffmpeg input', function (str) {
     // TODO: make a more sophisticated parser for options that can handle quote marks

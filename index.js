@@ -56,7 +56,9 @@ var deleteFolder = function (dir) {
 
 module.exports = function (config) {
   config = Object.assign({
-    'url': 'index.html',
+    roundToEvenWidth: true,
+    roundToEvenHeight: true,
+    url: 'index.html',
     pixFmt: 'yuv420p'
   }, config || {});
   var output = path.resolve(process.cwd(), config.output || 'video.mp4');

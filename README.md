@@ -137,10 +137,10 @@ Opens https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=
     * Width of capture, in pixels.
 * <a name="cli-options-height" href="#cli-options-height">#</a> Height: `-H`, `--height` *pixels*
     * Height of capture, in pixels.
-* <a name="cli-options-even-width" href="#cli-options-width">#</a> Even Width: `--even-width`
-    * Rounds width up to the nearest even number.
-* <a name="cli-options-even-height" href="#cli-options-height">#</a> Even Height: `--even-height`
-    * Rounds height up to the nearest even number.
+* <a name="cli-options-no-round-to-even-width" href="#cli-options-no-round-to-even-width">#</a> No Even Width Rounding: `--no-round-to-even-width`
+    * Disables automatic rounding of capture width up to the nearest even number.
+* <a name="cli-options-no-round-to-even-height" href="#cli-options-no-round-to-even-height">#</a> No Even Height Rounding: `--no-round-to-even-height`
+    * Disables automatic rounding of capture height up to the nearest even number.
 * <a name="cli-options-transparent-background" href="#cli-options-transparent-background">#</a> Transparent Background: `--transparent-background`
     * Allows background to be transparent if there is no background styling. Only works if the output video format supports transparency.
 * <a name="cli-options-left" href="#cli-options-left">#</a> Left: `-l`, `--left` *pixels*
@@ -216,8 +216,6 @@ var pages = [
       url: page.url,
       output: page.output,
       selector: page.selector,
-      evenWidth: true,
-      evenHeight: true,
       viewport: {
         width: 800,
         height: 600
@@ -255,8 +253,8 @@ The Node API is structured similarly to the command line options.
     * <a name="js-config-width" href="#js-config-width">#</a> `width` &lt;[number][]&gt; Width of capture, in pixels.
     * <a name="js-config-height" href="#js-config-height">#</a> `height` &lt;[number][]&gt; Height of capture, in pixels.
     * <a name="js-config-transparent-background" href="#js-config-transparent-background">#</a> `transparentBackground` &lt;[boolean][]&gt; Allows background to be transparent if there is no background styling. Only works if the output video format supports transparency.
-    * <a name="js-config-even-width" href="#js-config-even-width">#</a> `evenWidth` &lt;[boolean][]&gt; Rounds capture width up to the nearest even number.
-    * <a name="js-config-even-height" href="#js-config-even-height">#</a> `evenHeight` &lt;[boolean][]&gt; Rounds capture height up to the nearest even number.
+    * <a name="js-config-round-to-even-width" href="#js-config-round-to-even-width">#</a> `roundToEvenWidth` &lt;[boolean][]&gt; Rounds capture width up to the nearest even number (default: `true`).
+    * <a name="js-config-round-to-even-height" href="#js-config-round-to-even-height">#</a> `roundToEvenHeight` &lt;[boolean][]&gt; Rounds capture height up to the nearest even number (default: `true`).
     * <a name="js-config-left" href="#js-config-left">#</a> `left` &lt;[number][]&gt; Left edge of capture, in pixels. Equivalent to `config.xOffset`.
     * <a name="js-config-right" href="#js-config-right">#</a> `right` &lt;[number][]&gt; Right edge of capture, in pixels. Ignored if `config.width` is specified.
     * <a name="js-config-top" href="#js-config-top">#</a> `top` &lt;[number][]&gt; Top edge of capture, in pixels. Equivalent to `config.yOffset`.
