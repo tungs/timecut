@@ -48,8 +48,6 @@ commander
     return dims.length > 1 ? { width: dims[0], height: dims[1] } : { width: dims[0] };
   })
   .option('--transparent-background', 'Allow transparent backgrounds (only works for certain encodings)')
-  .option('--no-round-to-even-width', 'Disables automatic rounding of capture width up to the nearest even number')
-  .option('--no-round-to-even-height', 'Disables automatic rounding of capture height up to the nearest even number')
   .option('--frame-cache [directory]', 'Save frames in a temporary directory before processing')
   .option('-e, --input-options <options>', 'Extra arguments for ffmpeg input', function (str) {
     // TODO: make a more sophisticated parser for options that can handle quote marks
@@ -61,7 +59,7 @@ commander
   })
   .option('-p, --pix-fmt <pixel format>', 'Pixel format of output (default: yuv420p)')
   .option('-P, --pipe-mode', 'Pipe directly to ffmpeg (experimental)')
-  .option('-s, --start <n seconds>', 'Runs code for n virtual seconds before saving any frames. [0]', parseFloat, 0)
+  .option('-s, --start <n seconds>', 'Runs code for n virtual seconds before saving any frames.', parseFloat, 0)
   .option('-x, --x-offset <pixels>', 'X offset of capture, in pixels', parseFloat, 0)
   .option('-y, --y-offset <pixels>', 'Y offset of capture, in pixels', parseFloat, 0)
   .option('-W, --width <pixels>', 'Width of capture, in pixels', parseInt)
@@ -71,6 +69,8 @@ commander
   .option('-t, --top <pixels>', 'top edge of capture, in pixels. Equivalent to --y-offset', parseInt)
   .option('-b, --bottom <pixels>', 'bottom edge of capture, in pixels', parseInt)
   .option('--start-delay <n seconds>', 'Wait n real seconds after loading.', parseFloat, 0)
+  .option('--no-round-to-even-width', 'Disables automatic rounding of capture width up to the nearest even number.')
+  .option('--no-round-to-even-height', 'Disables automatic rounding of capture height up to the nearest even number.')
   .option('-q, --quiet', 'Suppress console logging')
   .parse(process.argv);
 
