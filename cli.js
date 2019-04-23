@@ -3,7 +3,7 @@
 /**
  * BSD 3-Clause License
  *
- * Copyright (c) 2018, Steve Tung
+ * Copyright (c) 2018-2019, Steve Tung
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@ const commander = require('commander');
 const recorder = require('./index.js');
 
 commander
-  .version('0.0.2', '-v, --version')
+  .version('0.0.3', '-v, --version')
   .usage('<url> [options]')
   .option('-O, --output <file name>', 'Name of output (default: video.mp4)')
   .option('-R, --fps <frame rate>', 'Frames per second to capture (default: 60)', parseFloat)
@@ -71,7 +71,7 @@ commander
   .option('--start-delay <n seconds>', 'Wait n real seconds after loading.', parseFloat, 0)
   .option('--no-round-to-even-width', 'Disables automatic rounding of capture width up to the nearest even number.')
   .option('--no-round-to-even-height', 'Disables automatic rounding of capture height up to the nearest even number.')
-  .option('-q, --quiet', 'Suppress console logging')
+  .option('-q, --quiet', 'Suppresses console logging')
   .parse(process.argv);
 
 commander.url = commander.args[0] || 'index.html';
