@@ -72,7 +72,7 @@ commander
   .option('--no-round-to-even-width', 'Disables automatic rounding of capture width up to the nearest even number.')
   .option('--no-round-to-even-height', 'Disables automatic rounding of capture height up to the nearest even number.')
   .option('-q, --quiet', 'Suppresses console logging')
-  .option('-l, --launch-args <launch arguments>', 'Custom launch arguments Puppeteer browser', function (str) {
+  .option('-L, --launch-arguments <arguments>', 'Custom launch arguments for Puppeteer browser', function (str) {
     // TODO: make a more sophisticated parser for options that can handle quote marks
     return str.split(' ');
   })
