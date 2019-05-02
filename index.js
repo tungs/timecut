@@ -47,11 +47,19 @@ const makeFileDirectoryIfNeeded = function (filepath) {
   }
 };
 
-var deleteFolder = function (dir) {
+const deleteFolder = function (dir) {
   fs.readdirSync(dir).forEach(function (file) {
     fs.unlinkSync(path.join(dir, file));
   });
   fs.rmdirSync(dir);
+};
+
+const argumentArrayContains = function (args, item) {
+  return args.reduce(function (accumulator, currentValue) {
+    return accumulator ||
+      (currentValue === item) ||
+      currentValue.startsWith(item + '=');
+  }, false);
 };
 
 module.exports = function (config) {
@@ -102,14 +110,6 @@ module.exports = function (config) {
       // eslint-disable-next-line no-console
       console.log.apply(this, arguments);
     }
-  };
-
-  var argumentArrayContains = function (args, item) {
-    return args.reduce(function (accumulator, currentValue) {
-      return accumulator ||
-        (currentValue === item) ||
-        currentValue.startsWith(item + '=');
-    }, false);
   };
 
   var makeProcessPromise = function () {

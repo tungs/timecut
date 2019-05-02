@@ -34,9 +34,10 @@
 
 const commander = require('commander');
 const recorder = require('./index.js');
+const packageInfo = require('./package.json');
 
 commander
-  .version('0.0.3', '-v, --version')
+  .version(packageInfo.version, '-v, --version')
   .usage('<url> [options]')
   .option('-O, --output <file name>', 'Name of output (default: video.mp4)')
   .option('-R, --fps <frame rate>', 'Frames per second to capture (default: 60)', parseFloat)
