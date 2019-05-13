@@ -73,7 +73,7 @@ module.exports = function (config) {
   var ffmpegArgs;
   var inputOptions = config.inputOptions || [];
   var outputOptions = config.outputOptions || [];
-  var tempDir = config.tempDir;
+  var frameDirectory = config.tempDir || config.frameDir;
   var fps;
   var frameMode = config.frameCache || !config.pipeMode;
   var pipeMode = config.pipeMode;
@@ -81,14 +81,14 @@ module.exports = function (config) {
   var outputPattern;
   var convertProcess, processPromise;
   if (frameMode) {
-    if (!tempDir) {
-      tempDir = 'timecut-temp-' + (new Date()).getTime();
+    if (!frameDirectory) {
+      frameDirectory = 'timecut-' + (config.keepFrames ? 'frames-' : 'temp-') + (new Date()).getTime();
     }
     if (typeof config.frameCache === 'string') {
-      tempDir = path.join(config.frameCache, tempDir);
+      frameDirectory = path.join(config.frameCache, frameDirectory);
     }
-    tempDir = path.resolve(path.parse(output).dir, tempDir);
-    outputPattern = path.resolve(tempDir, 'image-%09d.png');
+    frameDirectory = path.resolve(path.parse(output).dir, frameDirectory);
+    outputPattern = path.resolve(frameDirectory, 'image-%09d.png');
   } else {
     outputPattern = '';
   }
@@ -179,7 +179,7 @@ module.exports = function (config) {
       log(err);
     }).then(function () {
       if (frameMode && !config.keepFrames) {
-        deleteFolder(tempDir);
+        deleteFolder(frameDirectory);
       }
     });
 };

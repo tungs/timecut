@@ -78,6 +78,7 @@ commander
     // TODO: make a more sophisticated parser for options that can handle quote marks
     return str.split(' ');
   })
+  .option('--keep-frames', 'Doesn\'t delete frames after processing them. Doesn\'t do anything in pipe mode')
   .parse(process.argv);
 
 commander.url = commander.args[0] || 'index.html';
