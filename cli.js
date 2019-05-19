@@ -74,13 +74,13 @@ commander
   .option('--no-round-to-even-width', 'Disables automatic rounding of capture width up to the nearest even number.')
   .option('--no-round-to-even-height', 'Disables automatic rounding of capture height up to the nearest even number.')
   .option('-q, --quiet', 'Suppresses console logging')
+  .option('--executable-path <path>', 'Uses Chromium/Chrome application at specified path for puppeteer')
   .option('-L, --launch-arguments <arguments>', 'Custom launch arguments for Puppeteer browser', function (str) {
     // TODO: make a more sophisticated parser for options that can handle quote marks
     return str.split(' ');
   })
-  .option('--keep-frames', 'Doesn\'t delete frames after processing them. Doesn\'t do anything in pipe mode')
   .option('--no-headless', 'Chromium/Chrome runs in a window instead of headless mode')
-  .option('--executable-path <path>', 'Uses Chromium/Chrome application at specified path for puppeteer')
+  .option('--keep-frames', 'Doesn\'t delete frames after processing them. Doesn\'t do anything in pipe mode')
   .parse(process.argv);
 
 commander.url = commander.args[0] || 'index.html';
