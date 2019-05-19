@@ -238,7 +238,7 @@ var pages = [
 
 ### <a name="node-api" href="#node-api">#</a> Node API
 
-The Node API is structured similarly to the command line options.
+The Node API is structured similarly to the command line options, but there are a few options for the Node API that are not accessible through the command line interface: [`config.logToStdErr`](#js-config-log-to-std-err), [`config.preparePage`](#js-config-prepare-page), [`config.preparePageForScreenshot`](#js-config-prepare-page-for-screenshot), and certain [`config.viewport`](#js-config-viewport) properties.
 
 **timecut(config)**
 *  <a name="js-api-config" href="#js-api-config">#</a> `config` &lt;[Object][]&gt;
