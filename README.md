@@ -280,6 +280,12 @@ The Node API is structured similarly to the command line options.
     * <a name="js-config-keep-frames" href="#js-config-keep-frames">#</a> `keepFrames` &lt;[boolean][]&gt; If set to true, doesn't delete frames after processing them. Doesn't do anything in pipe mode.
     * <a name="js-config-quiet" href="#js-config-quiet">#</a> `quiet` &lt;[boolean][]&gt; Suppresses console logging.
     * <a name="js-config-log-to-std-err" href="#js-config-log-to-std-err">#</a> `logToStdErr` &lt;[boolean][]&gt; Logs to stderr instead of stdout. Doesn't do anything if `config.quiet` is set to true.
+    * <a name="js-config-prepare-page" href="#js-config-prepare-page">#</a> `preparePage` &lt;[function][]([Page][])&gt; A setup function that will be called one time before taking screenshots. If it returns a promise, capture will be paused until the promise resolves.
+        * `page` &lt;[Page][]&gt; The puppeteer instance of the page being captured.
+    * <a name="js-config-prepare-page-for-screenshot" href="#js-config-prepare-page-for-screenshot">#</a> `preparePageForScreenshot` &lt;[function][]([Page][], [number][], [number][])&gt; A setup function that will be called before each screenshot. If it returns a promise, capture will be paused until the promise resolves.
+        * `page` &lt;[Page][]&gt; The puppeteer instance of the page being captured.
+        * `frameNumber` &lt;[number][]&gt; The current frame number (1 based).
+        * `totalFrames` &lt;[number][]&gt; The total number of frames.
 * <a name="js-api-return" href="#js-api-return">#</a> returns: &lt;[Promise][]&gt; resolves after all the frames have been captured.
 
 ## <a name="how-it-works" href="#how-it-works">#</a> How it works
@@ -294,3 +300,4 @@ This work was inspired by [a talk by Noah Veltman](https://github.com/veltman/d3
 [Array]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
 [Promise]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
 [CSS selector]: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors
+[Page]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-page
