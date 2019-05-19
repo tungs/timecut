@@ -79,6 +79,8 @@ commander
     return str.split(' ');
   })
   .option('--keep-frames', 'Doesn\'t delete frames after processing them. Doesn\'t do anything in pipe mode')
+  .option('--no-headless', 'Chromium/Chrome runs in a window instead of headless mode')
+  .option('--executable-path <path>', 'Uses Chromium/Chrome application at specified path for puppeteer')
   .parse(process.argv);
 
 commander.url = commander.args[0] || 'index.html';
