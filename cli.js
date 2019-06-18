@@ -71,6 +71,7 @@ commander
   .option('-b, --bottom <pixels>', 'bottom edge of capture, in pixels', parseInt)
   .option('--start-delay <n seconds>', 'Wait n real seconds after loading.', parseFloat, 0)
   .option('-u, --unrandomize [seed]', 'Overwrite Math.random() with a PRNG with up to 4 optional, comma-separated integer seeds')
+  .option('--canvas-mode [type]', '(experimental) Switches to canvas mode, capturing the canvas selected by --selector as image type (default: png)')
   .option('--no-round-to-even-width', 'Disables automatic rounding of capture width up to the nearest even number.')
   .option('--no-round-to-even-height', 'Disables automatic rounding of capture height up to the nearest even number.')
   .option('-q, --quiet', 'Suppresses console logging')
