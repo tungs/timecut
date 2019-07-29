@@ -127,7 +127,7 @@ module.exports = function (config) {
     }
 
     ffmpegArgs = ffmpegArgs.concat(['-i', input]);
-    if (!argumentArrayContains(inputOptions, '-pix_fmt') && config.pixFmt) {
+    if (!argumentArrayContains(outputOptions, '-pix_fmt') && config.pixFmt) {
       ffmpegArgs = ffmpegArgs.concat(['-pix_fmt', config.pixFmt]);
     }
     // -y writes over existing files
