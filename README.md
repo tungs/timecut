@@ -7,7 +7,7 @@ You can run **timecut** from the command line or as a Node.js library. It requir
 To only record screenshots and save them as pictures, see **[timesnap](https://github.com/tungs/timesnap)**.
 
 ## <a name="limitations" href="#limitations">#</a> **timecut** and **timesnap** Limitations
-**timesnap** (and **timecut** by extension) only overwrites JavaScript functions, so pages where changes occur via other means (e.g. through video or transitions/animations from CSS rules) will likely not render as intended.
+**timesnap** (and **timecut** by extension) only overwrites JavaScript functions and video playback, so pages where changes occur via other means (e.g. through transitions/animations from CSS rules) will likely not render as intended.
 
 ## Read Me Contents
 
