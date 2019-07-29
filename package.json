@@ -1,6 +1,6 @@
 {
   "name": "timecut",
-  "version": "0.1.1",
+  "version": "0.1.2-prerelease",
   "description": "Record smooth movies of web pages",
   "repository": {
     "type": "git",
