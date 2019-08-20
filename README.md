@@ -236,7 +236,7 @@ var pages = [
 
 ### <a name="node-api" href="#node-api">#</a> Node API
 
-The Node API is structured similarly to the command line options, but there are a few options for the Node API that are not accessible through the command line interface: [`config.logToStdErr`](#js-config-log-to-std-err), [`config.preparePage`](#js-config-prepare-page), [`config.preparePageForScreenshot`](#js-config-prepare-page-for-screenshot), and certain [`config.viewport`](#js-config-viewport) properties.
+The Node API is structured similarly to the command line options, but there are a few options for the Node API that are not accessible through the command line interface: [`config.logToStdErr`](#js-config-log-to-std-err), [`config.preparePage`](#js-config-prepare-page), [`config.preparePageForScreenshot`](#js-config-prepare-page-for-screenshot), [`config.pipeOutputTo`](#js-config-pipe-output-to), and certain [`config.viewport`](#js-config-viewport) properties.
 
 **timecut(config)**
 *  <a name="js-api-config" href="#js-api-config">#</a> `config` &lt;[Object][]&gt;
@@ -285,7 +285,8 @@ The Node API is structured similarly to the command line options, but there are 
     * <a name="js-config-prepare-page-for-screenshot" href="#js-config-prepare-page-for-screenshot">#</a> `preparePageForScreenshot` &lt;[function][]([Page][], [number][], [number][])&gt; A setup function that will be called before each screenshot. If it returns a promise, capture will be paused until the promise resolves.
         * `page` &lt;[Page][]&gt; The puppeteer instance of the page being captured.
         * `frameNumber` &lt;[number][]&gt; The current frame number (1 based).
-        * `totalFrames` &lt;[number][]&gt; The total number of frames.
+        * `totalFrames` &lt;[number][]&gt; The total number of frames.             
+    * <a name="js-config-pipe-output-to" href="#js-config-pipe-output-to">#</a> `pipeOutputTo` &lt;[function][]()&gt; A function to receive the output stream from FFmpeg. [Here is an example](https://gist.github.com/videowala/be31ace4ec2f9ff21f09478a6ccc15c6) of storing the video directly to S3 without saving it to disk.    
 * <a name="js-api-return" href="#js-api-return">#</a> returns: &lt;[Promise][]&gt; resolves after all the frames have been captured.
 
 ## <a name="modes" href="#modes">#</a> **timecut** Modes
