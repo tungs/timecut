@@ -131,7 +131,12 @@ module.exports = function (config) {
       ffmpegArgs = ffmpegArgs.concat(['-pix_fmt', config.pixFmt]);
     }
     // -y writes over existing files
-    ffmpegArgs = ffmpegArgs.concat(outputOptions).concat(['-y', output]);
+    var outputArgs = ['-y', output];
+    
+    if(config.pipeOutputTo){
+      outputArgs = ['-f','mp4', '-movflags','frag_keyframe+empty_moov+faststart', 'pipe:1'];
+    } 
+    ffmpegArgs = ffmpegArgs.concat(outputOptions).concat(outputArgs);
     convertProcess = spawn('ffmpeg', ffmpegArgs);
     convertProcess.stderr.setEncoding('utf8');
     convertProcess.stderr.on('data', function (data) {
@@ -142,6 +147,7 @@ module.exports = function (config) {
         resolve();
       });
       convertProcess.on('error', function (err) {
+        console.log("error")
         processError = err;
         reject(err);
       });
@@ -149,6 +155,9 @@ module.exports = function (config) {
         processError = err;
         reject(err);
       });
+      if(config.pipeOutputTo){
+        convertProcess.stdout.pipe(config.pipeOutputTo);
+      }
     });
   };
 
