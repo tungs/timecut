@@ -69,7 +69,8 @@ module.exports = function (config) {
     url: 'index.html',
     pixFmt: 'yuv420p'
   }, config || {});
-  var output = path.resolve(process.cwd(), config.output || 'video.mp4');
+
+  var output = config.output;
   var ffmpegArgs;
   var inputOptions = config.inputOptions || [];
   var outputOptions = config.outputOptions || [];
