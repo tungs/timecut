@@ -149,7 +149,6 @@ module.exports = function (config) {
         resolve();
       });
       convertProcess.on('error', function (err) {
-        console.log("error")
         processError = err;
         reject(err);
       });
