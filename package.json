@@ -22,7 +22,8 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "commander": "^2.11.0",
-    "timesnap": "0.1.1"
+    "timesnap": "videowala/timesnap",
+    "aws-sdk": "2.533.0"
   },
   "devDependencies": {
     "eslint": "^4.3.0"

@@ -30,7 +30,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-const timesnap = require('timesnap');
+const timesnap = require('../timesnap/index');
 const path = require('path');
 const fs = require('fs');
 const spawn = require('child_process').spawn;
@@ -121,7 +121,7 @@ module.exports = function (config) {
       input = outputPattern;
     }
     ffmpegArgs = inputOptions;
-
+    
     if (!argumentArrayContains(inputOptions, '-framerate')) {
       ffmpegArgs = ffmpegArgs.concat(['-framerate', fps]);
     }
@@ -131,12 +131,14 @@ module.exports = function (config) {
       ffmpegArgs = ffmpegArgs.concat(['-pix_fmt', config.pixFmt]);
     }
     // -y writes over existing files
-    var outputArgs = ['-y', output];
+    var outputArgs = ['-y',output];
+    
     
     if(config.pipeOutputTo){
       outputArgs = ['-f','mp4', '-movflags','frag_keyframe+empty_moov+faststart', 'pipe:1'];
     } 
     ffmpegArgs = ffmpegArgs.concat(outputOptions).concat(outputArgs);
+    console.log(ffmpegArgs)
     convertProcess = spawn('ffmpeg', ffmpegArgs);
     convertProcess.stderr.setEncoding('utf8');
     convertProcess.stderr.on('data', function (data) {
@@ -156,6 +158,10 @@ module.exports = function (config) {
         reject(err);
       });
       if(config.pipeOutputTo){
+        convertProcess.stdout.on('error', function (err) {
+          processError = err;
+          reject(err);
+        });
         convertProcess.stdout.pipe(config.pipeOutputTo);
       }
     });
@@ -188,6 +194,7 @@ module.exports = function (config) {
       log(err);
     }).then(function () {
       if (frameMode && !config.keepFrames) {
+        console.log("is deleting?")
         deleteFolder(frameDirectory);
       }
     });
