@@ -2,7 +2,7 @@
 
 **timecut** is a Node.js program that records smooth videos of web pages that use JavaScript animations. It uses **[timesnap](https://github.com/tungs/timesnap)** and [puppeteer](https://github.com/GoogleChrome/puppeteer) to open a web page, overwrite its time-handling functions, take snapshots of the web page, and then passes the results to ffmpeg to encode those frames into a video. This allows for slower-than-realtime and/or virtual high-fps capture of frames, while the resulting video is smooth.
 
-You can run **timecut** from the command line or as a Node.js library. It requires ffmpeg, Node v6.4.0 or higher, and npm.
+You can run **timecut** from the command line or as a Node.js library. It requires ffmpeg, Node v8.9.0 or higher, and npm.
 
 To only record screenshots and save them as pictures, see **[timesnap](https://github.com/tungs/timesnap)**.
 
@@ -204,7 +204,7 @@ timecut({
 });
 ```
 
-**<a name="node-example-multiple" href="#node-example-multiple">#</a> Multiple pages (Requires Node v7.6.0 or higher):**
+**<a name="node-example-multiple" href="#node-example-multiple">#</a> Multiple pages:**
 ```node
 const timecut = require('timecut');
 var pages = [
