@@ -80,6 +80,7 @@ module.exports = function (config) {
   var processError;
   var outputPattern;
   var convertProcess, processPromise;
+  var extension;
   if (frameMode) {
     if (!frameDirectory) {
       frameDirectory = 'timecut-' + (config.keepFrames ? 'frames-' : 'temp-') + (new Date()).getTime();
@@ -88,7 +89,8 @@ module.exports = function (config) {
       frameDirectory = path.join(config.frameCache, frameDirectory);
     }
     frameDirectory = path.resolve(path.parse(output).dir, frameDirectory);
-    outputPattern = path.resolve(frameDirectory, 'image-%09d.png');
+    extension = '.' + (config.screenshotType || 'png');
+    outputPattern = path.resolve(frameDirectory, 'image-%09d' + extension);
   } else {
     outputPattern = '';
   }
