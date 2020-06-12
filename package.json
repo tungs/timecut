@@ -1,6 +1,6 @@
 {
   "name": "timecut",
-  "version": "0.1.2-prerelease",
+  "version": "0.1.3-prerelease",
   "description": "Record smooth movies of web pages",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
     "name": "Steve Tung"
   },
   "engines": {
-    "node": ">=6.4.0"
+    "node": ">=8.9.0"
   },
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "commander": "^2.11.0",
-    "timesnap": "videowala/timesnap"
+    "timesnap": "0.1.2"
   },
   "devDependencies": {
     "eslint": "^4.3.0"
