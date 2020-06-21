@@ -286,6 +286,10 @@ The Node API is structured similarly to the command line options, but there are 
         * `page` &lt;[Page][]&gt; The puppeteer instance of the page being captured.
         * `frameNumber` &lt;[number][]&gt; The current frame number (1 based).
         * `totalFrames` &lt;[number][]&gt; The total number of frames.
+    * <a name="js-config-ffmpeg-command" href="#js-config-ffmpeg-command">#</a> `ffmpegCommand` &lt;[function][]([string][])&gt; A callback function that will be called before ffmpeg execution containing the full ffmpeg command.
+        * `command` &lt;[string][]&gt; The ffmpeg command.
+    * <a name="js-config-ffmpeg-process" href="#js-config-ffmpeg-process">#</a> `ffmpegProcess` &lt;[function][]([ChildProcess][])&gt; A callback function that will be called after ffmpeg process spawned and return the ffmpeg child process that later could be used to cancel the execution or to listen to its events.
+        * `process` &lt;[ChildProcess][]&gt; The ffmpeg child process.
 * <a name="js-api-return" href="#js-api-return">#</a> returns: &lt;[Promise][]&gt; resolves after all the frames have been captured.
 
 ## <a name="modes" href="#modes">#</a> **timecut** Modes
@@ -312,3 +316,4 @@ This work was inspired by [a talk by Noah Veltman](https://github.com/veltman/d3
 [function]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions
 [CSS selector]: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors
 [Page]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-page
+[ChildProcess]: https://nodejs.org/api/child_process.html#child_process_class_childprocess

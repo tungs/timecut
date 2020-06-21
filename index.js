@@ -132,7 +132,15 @@ module.exports = function (config) {
     }
     // -y writes over existing files
     ffmpegArgs = ffmpegArgs.concat(outputOptions).concat(['-y', output]);
+    if(config.ffmpegCommand && typeof config.ffmpegCommand === 'function') {
+      config.ffmpegCommand('ffmpeg ' + ffmpegArgs.join(' '));
+    }
+
     convertProcess = spawn('ffmpeg', ffmpegArgs);
+    if(config.ffmpegProcess && typeof config.ffmpegProcess === 'function') {
+      config.ffmpegProcess(convertProcess);
+    }
+
     convertProcess.stderr.setEncoding('utf8');
     convertProcess.stderr.on('data', function (data) {
       log(data);
