@@ -166,7 +166,9 @@ module.exports = function (config) {
       if (processError) {
         throw processError;
       }
-      convertProcess.stdin.write(buffer);
+      if(!convertProcess.killed) {
+        convertProcess.stdin.write(buffer);
+      }
     };
   }
 
