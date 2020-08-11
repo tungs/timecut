@@ -81,6 +81,7 @@ module.exports = function (config) {
   var outputPattern;
   var convertProcess, processPromise;
   var extension;
+  var screenshotType = (config.screenshotType || 'png');
   if (frameMode) {
     if (!frameDirectory) {
       frameDirectory = 'timecut-' + (config.keepFrames ? 'frames-' : 'temp-') + (new Date()).getTime();
@@ -89,7 +90,7 @@ module.exports = function (config) {
       frameDirectory = path.join(config.frameCache, frameDirectory);
     }
     frameDirectory = path.resolve(path.parse(output).dir, frameDirectory);
-    extension = '.' + (config.screenshotType || 'png');
+    extension = '.' + screenshotType;
     outputPattern = path.resolve(frameDirectory, 'image-%09d' + extension);
   } else {
     outputPattern = '';
@@ -128,7 +129,12 @@ module.exports = function (config) {
       ffmpegArgs = ffmpegArgs.concat(['-framerate', fps]);
     }
 
-    ffmpegArgs = ffmpegArgs.concat(['-i', input]);
+    if (pipeMode && (screenshotType === 'jpeg' || screenshotType === 'jpg')) {
+      ffmpegArgs = ffmpegArgs.concat(['-f', 'image2pipe', '-vcodec', 'mjpeg', '-i', '-']);
+    } else {
+      ffmpegArgs = ffmpegArgs.concat(['-i', input]);
+    }
+
     if (!argumentArrayContains(outputOptions, '-pix_fmt') && config.pixFmt) {
       ffmpegArgs = ffmpegArgs.concat(['-pix_fmt', config.pixFmt]);
     }

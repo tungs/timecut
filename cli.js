@@ -81,6 +81,8 @@ commander
     return str.split(' ');
   })
   .option('--no-headless', 'Chromium/Chrome runs in a window instead of headless mode')
+  .option('--screenshot-type <type>', 'Output image format for screenshots, either png or jpeg')
+  .option('--screenshot-quality <level>', 'The quality level for lossy screenshots', parseFloat)
   .option('--keep-frames', 'Doesn\'t delete frames after processing them. Doesn\'t do anything in pipe mode')
   .parse(process.argv);
 
