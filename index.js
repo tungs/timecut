@@ -130,6 +130,8 @@ module.exports = function (config) {
     }
 
     if (pipeMode && (screenshotType === 'jpeg' || screenshotType === 'jpg')) {
+      // piping jpegs with the other method can cause an error
+      // this is intended to fix that
       ffmpegArgs = ffmpegArgs.concat(['-f', 'image2pipe', '-vcodec', 'mjpeg', '-i', '-']);
     } else {
       ffmpegArgs = ffmpegArgs.concat(['-i', input]);
