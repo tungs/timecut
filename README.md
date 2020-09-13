@@ -276,7 +276,7 @@ The Node API is structured similarly to the command line options, but there are 
     * <a name="js-config-input-options" href="#js-config-input-options">#</a> `inputOptions` &lt;[Array][] &lt;[string][]&gt;&gt; Extra arguments for ffmpeg input. Example: `['-framerate', '30']`
     * <a name="js-config-output-options" href="#js-config-output-options">#</a> `outputOptions` &lt;[Array][] &lt;[string][]&gt;&gt; Extra arguments for ffmpeg output. Example: `['-vf', 'scale=320:240']`
     * <a name="js-config-pixel-format" href="#js-config-pixel-format">#</a> `pixFmt` &lt;[string][]&gt; Pixel format for output video (default: `yuv420p`).
-    * <a name="js-config-start-delay" href="#js-config-start-delay">#</a> `startDelay` &lt;[number][]&gt; Waits `config.loadDelay` real seconds after loading before starting (default: `0`).
+    * <a name="js-config-start-delay" href="#js-config-start-delay">#</a> `startDelay` &lt;[number][]&gt; Waits `config.startDelay` real seconds after loading before starting (default: `0`).
     * <a name="js-config-keep-frames" href="#js-config-keep-frames">#</a> `keepFrames` &lt;[boolean][]&gt; If set to true, doesn't delete frames after processing them. Doesn't do anything in pipe mode.
     * <a name="js-config-quiet" href="#js-config-quiet">#</a> `quiet` &lt;[boolean][]&gt; Suppresses console logging.
     * <a name="js-config-log-to-std-err" href="#js-config-log-to-std-err">#</a> `logToStdErr` &lt;[boolean][]&gt; Logs to stderr instead of stdout. Doesn't do anything if `config.quiet` is set to true.
