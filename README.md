@@ -157,6 +157,10 @@ Opens https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=
     * Arguments to pass to Puppeteer/Chromium, enclosed in quotes. Example: `--launch-arguments="--single-process"`. A list of arguments can be found [here](https://peter.sh/experiments/chromium-command-line-switches).
 * <a name="cli-options-no-headless" href="#cli-options-no-headless">#</a> No Headless: `--no-headless`
     * Runs Chromium/Chrome in windowed mode.
+* <a name="cli-options-screenshot-type" href="#cli-options-screenshot-type">#</a> Screenshot Type: `--screenshot-type` *type*
+    * Output image format for the screenshots. By default, the file extension is used to infer type, and failing that, `png` is used. `jpeg` is also available.
+* <a name="cli-options-screenshot-quality" href="#cli-options-screenshot-quality">#</a> Screenshot Quality: `--screenshot-quality` *number*
+    * Quality level between 0 to 1 for lossy screenshots. Defaults to 0.92 when in [canvas capture mode](#cli-options-canvas-capture-mode) and 0.8 otherwise.
 * <a name="cli-options-extra-input-options" href="#cli-options-extra-input-options">#</a> Extra input options: `-e`, `--input-options` *options*
     * Extra arguments for ffmpeg input, enclosed in quotes. Example: `--input-options="-framerate 30"`
 * <a name="cli-options-extra-output-options" href="#cli-options-extra-output-options">#</a> Extra output options: `-E`, `--output-options` *options*
@@ -273,6 +277,8 @@ The Node API is structured similarly to the command line options, but there are 
     * <a name="js-config-executable-path" href="#js-config-executable-path">#</a> `executablePath` &lt;[string][]&gt; Uses the Chromium/Chrome instance at `config.executablePath` for puppeteer.
     * <a name="js-config-launch-arguments" href="#js-config-launch-arguments">#</a> `launchArguments` &lt;[Array][] &lt;[string][]&gt;&gt; Extra arguments for Puppeteer/Chromium. Example: `['--single-process']`. A list of arguments can be found [here](https://peter.sh/experiments/chromium-command-line-switches).
     * <a name="js-config-headless" href="#js-config-headless">#</a> `headless` &lt;[boolean][]&gt; Runs puppeteer in headless (nonwindowed) mode (default: `true`).
+    * <a name="js-config-screenshot-type" href="#js-config-screenshot-type">#</a> `screenshotType` &lt;[string][]&gt; Output image format for the screenshots. By default, the file extension is used to infer type, and failing that, `'png'` is used. `'jpeg'` is also available.
+    * <a name="js-config-screenshot-quality" href="#js-config-screenshot-quality">#</a> `screenshotQuality` &lt;[number][]&gt; Quality level between 0 to 1 for lossy screenshots. Defaults to 0.92 when in [canvas capture mode](#js-config-canvas-capture-mode) and 0.8 otherwise.
     * <a name="js-config-input-options" href="#js-config-input-options">#</a> `inputOptions` &lt;[Array][] &lt;[string][]&gt;&gt; Extra arguments for ffmpeg input. Example: `['-framerate', '30']`
     * <a name="js-config-output-options" href="#js-config-output-options">#</a> `outputOptions` &lt;[Array][] &lt;[string][]&gt;&gt; Extra arguments for ffmpeg output. Example: `['-vf', 'scale=320:240']`
     * <a name="js-config-pixel-format" href="#js-config-pixel-format">#</a> `pixFmt` &lt;[string][]&gt; Pixel format for output video (default: `yuv420p`).
