@@ -275,6 +275,7 @@ The Node API is structured similarly to the command line options, but there are 
     * <a name="js-config-headless" href="#js-config-headless">#</a> `headless` &lt;[boolean][]&gt; Runs puppeteer in headless (nonwindowed) mode (default: `true`).
     * <a name="js-config-input-options" href="#js-config-input-options">#</a> `inputOptions` &lt;[Array][] &lt;[string][]&gt;&gt; Extra arguments for ffmpeg input. Example: `['-framerate', '30']`
     * <a name="js-config-output-options" href="#js-config-output-options">#</a> `outputOptions` &lt;[Array][] &lt;[string][]&gt;&gt; Extra arguments for ffmpeg output. Example: `['-vf', 'scale=320:240']`
+    * <a name="js-config-ffmpeg-process-options" href="#js-config-ffmpeg-process-options">#</a> `ffmpegProcessOptions` &lt;[Array][] &lt;[string][]&gt;&gt; Extra arguments for ffmpeg process. Example: `{detached: true}`
     * <a name="js-config-pixel-format" href="#js-config-pixel-format">#</a> `pixFmt` &lt;[string][]&gt; Pixel format for output video (default: `yuv420p`).
     * <a name="js-config-start-delay" href="#js-config-start-delay">#</a> `startDelay` &lt;[number][]&gt; Waits `config.loadDelay` real seconds after loading before starting (default: `0`).
     * <a name="js-config-keep-frames" href="#js-config-keep-frames">#</a> `keepFrames` &lt;[boolean][]&gt; If set to true, doesn't delete frames after processing them. Doesn't do anything in pipe mode.

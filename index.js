@@ -73,6 +73,7 @@ module.exports = function (config) {
   var ffmpegArgs;
   var inputOptions = config.inputOptions || [];
   var outputOptions = config.outputOptions || [];
+  var ffmpegProcessOptions = config.ffmpegProcessOptions || null;
   var frameDirectory = config.tempDir || config.frameDir;
   var fps;
   var frameMode = config.frameCache || !config.pipeMode;
@@ -136,7 +137,7 @@ module.exports = function (config) {
       config.ffmpegCommand('ffmpeg ' + ffmpegArgs.join(' '));
     }
 
-    convertProcess = spawn('ffmpeg', ffmpegArgs);
+    convertProcess = spawn('ffmpeg', ffmpegArgs, ffmpegProcessOptions);
     if(config.ffmpegProcess && typeof config.ffmpegProcess === 'function') {
       config.ffmpegProcess(convertProcess);
     }
