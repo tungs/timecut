@@ -281,6 +281,7 @@ The Node API is structured similarly to the command line options, but there are 
     * <a name="js-config-screenshot-quality" href="#js-config-screenshot-quality">#</a> `screenshotQuality` &lt;[number][]&gt; Quality level between 0 to 1 for lossy screenshots. Defaults to 0.92 when in [canvas capture mode](#js-config-canvas-capture-mode) and 0.8 otherwise.
     * <a name="js-config-input-options" href="#js-config-input-options">#</a> `inputOptions` &lt;[Array][] &lt;[string][]&gt;&gt; Extra arguments for ffmpeg input. Example: `['-framerate', '30']`
     * <a name="js-config-output-options" href="#js-config-output-options">#</a> `outputOptions` &lt;[Array][] &lt;[string][]&gt;&gt; Extra arguments for ffmpeg output. Example: `['-vf', 'scale=320:240']`
+    * <a name="js-config-ffmpeg-process-options" href="#js-config-ffmpeg-process-options">#</a> `ffmpegProcessOptions` &lt;[Array][] &lt;[string][]&gt;&gt; Extra arguments for ffmpeg process. Example: `{detached: true}`
     * <a name="js-config-pixel-format" href="#js-config-pixel-format">#</a> `pixFmt` &lt;[string][]&gt; Pixel format for output video (default: `yuv420p`).
     * <a name="js-config-start-delay" href="#js-config-start-delay">#</a> `startDelay` &lt;[number][]&gt; Waits `config.startDelay` real seconds after loading before starting (default: `0`).
     * <a name="js-config-keep-frames" href="#js-config-keep-frames">#</a> `keepFrames` &lt;[boolean][]&gt; If set to true, doesn't delete frames after processing them. Doesn't do anything in pipe mode.
@@ -293,6 +294,10 @@ The Node API is structured similarly to the command line options, but there are 
         * `page` &lt;[Page][]&gt; The puppeteer instance of the page being captured.
         * `frameNumber` &lt;[number][]&gt; The current frame number (1 based).
         * `totalFrames` &lt;[number][]&gt; The total number of frames.
+    * <a name="js-config-ffmpeg-command" href="#js-config-ffmpeg-command">#</a> `ffmpegCommand` &lt;[function][]([string][])&gt; A callback function that will be called before ffmpeg execution containing the full ffmpeg command.
+        * `command` &lt;[string][]&gt; The ffmpeg command.
+    * <a name="js-config-ffmpeg-process" href="#js-config-ffmpeg-process">#</a> `ffmpegProcess` &lt;[function][]([ChildProcess][])&gt; A callback function that will be called after ffmpeg process spawned and return the ffmpeg child process that later could be used to cancel the execution or to listen to its events.
+        * `process` &lt;[ChildProcess][]&gt; The ffmpeg child process.
 * <a name="js-api-return" href="#js-api-return">#</a> returns: &lt;[Promise][]&gt; resolves after all the frames have been captured.
 
 ## <a name="modes" href="#modes">#</a> **timecut** Modes
@@ -319,3 +324,4 @@ This work was inspired by [a talk by Noah Veltman](https://github.com/veltman/d3
 [function]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions
 [CSS selector]: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors
 [Page]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-page
+[ChildProcess]: https://nodejs.org/api/child_process.html#child_process_class_childprocess

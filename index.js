@@ -73,6 +73,7 @@ module.exports = function (config) {
   var ffmpegArgs;
   var inputOptions = config.inputOptions || [];
   var outputOptions = config.outputOptions || [];
+  var ffmpegProcessOptions = config.ffmpegProcessOptions || null;
   var frameDirectory = config.tempDir || config.frameDir;
   var fps;
   var frameMode = config.frameCache || !config.pipeMode;
@@ -142,7 +143,15 @@ module.exports = function (config) {
     }
     // -y writes over existing files
     ffmpegArgs = ffmpegArgs.concat(outputOptions).concat(['-y', output]);
-    convertProcess = spawn('ffmpeg', ffmpegArgs);
+    if(config.ffmpegCommand && typeof config.ffmpegCommand === 'function') {
+      config.ffmpegCommand('ffmpeg ' + ffmpegArgs.join(' '));
+    }
+
+    convertProcess = spawn('ffmpeg', ffmpegArgs, ffmpegProcessOptions);
+    if(config.ffmpegProcess && typeof config.ffmpegProcess === 'function') {
+      config.ffmpegProcess(convertProcess);
+    }
+
     convertProcess.stderr.setEncoding('utf8');
     convertProcess.stderr.on('data', function (data) {
       log(data);
@@ -168,7 +177,9 @@ module.exports = function (config) {
       if (processError) {
         throw processError;
       }
-      convertProcess.stdin.write(buffer);
+      if(!convertProcess.killed) {
+        convertProcess.stdin.write(buffer);
+      }
     };
   }
 
