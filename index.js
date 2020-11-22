@@ -172,6 +172,7 @@ module.exports = function (config) {
     };
   }
 
+  var overallError;
   return timesnap(timesnapConfig)
     .then(function () {
       if (convertProcess) {
@@ -186,10 +187,14 @@ module.exports = function (config) {
         return makeProcessPromise();
       }
     }).catch(function (err) {
+      overallError = err;
       log(err);
     }).then(function () {
       if (frameMode && !config.keepFrames) {
         deleteFolder(frameDirectory);
+      }
+      if (overallError) {
+        throw overallError;
       }
     });
 };
