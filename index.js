@@ -90,6 +90,7 @@ module.exports = function (config) {
       frameDirectory = path.join(config.frameCache, frameDirectory);
     }
     frameDirectory = path.resolve(path.parse(output).dir, frameDirectory);
+    makeFileDirectoryIfNeeded(frameDirectory);
     extension = '.' + screenshotType;
     outputPattern = path.resolve(frameDirectory, 'image-%09d' + extension);
   } else {
