@@ -124,7 +124,7 @@ module.exports = function (config) {
       input = outputPattern;
     }
     ffmpegArgs = inputOptions;
-
+    
     if (!argumentArrayContains(inputOptions, '-framerate')) {
       ffmpegArgs = ffmpegArgs.concat(['-framerate', fps]);
     }
@@ -141,7 +141,14 @@ module.exports = function (config) {
       ffmpegArgs = ffmpegArgs.concat(['-pix_fmt', config.pixFmt]);
     }
     // -y writes over existing files
-    ffmpegArgs = ffmpegArgs.concat(outputOptions).concat(['-y', output]);
+    var outputArgs = ['-y',output];
+    
+    
+    if(config.pipeOutputTo){
+      outputArgs = ['-f','mp4', '-movflags','frag_keyframe+empty_moov+faststart', 'pipe:1'];
+    } 
+    ffmpegArgs = ffmpegArgs.concat(outputOptions).concat(outputArgs);
+    console.log(ffmpegArgs)
     convertProcess = spawn('ffmpeg', ffmpegArgs);
     convertProcess.stderr.setEncoding('utf8');
     convertProcess.stderr.on('data', function (data) {
@@ -159,6 +166,13 @@ module.exports = function (config) {
         processError = err;
         reject(err);
       });
+      if(config.pipeOutputTo){
+        convertProcess.stdout.on('error', function (err) {
+          processError = err;
+          reject(err);
+        });
+        convertProcess.stdout.pipe(config.pipeOutputTo);
+      }
     });
   };
 
@@ -191,6 +205,7 @@ module.exports = function (config) {
       log(err);
     }).then(function () {
       if (frameMode && !config.keepFrames) {
+        console.log("is deleting?")
         deleteFolder(frameDirectory);
       }
       if (overallError) {
