@@ -124,7 +124,6 @@ module.exports = function (config) {
       input = outputPattern;
     }
     ffmpegArgs = inputOptions;
-    
     if (!argumentArrayContains(inputOptions, '-framerate')) {
       ffmpegArgs = ffmpegArgs.concat(['-framerate', fps]);
     }
@@ -140,15 +139,24 @@ module.exports = function (config) {
     if (!argumentArrayContains(outputOptions, '-pix_fmt') && config.pixFmt) {
       ffmpegArgs = ffmpegArgs.concat(['-pix_fmt', config.pixFmt]);
     }
-    // -y writes over existing files
-    var outputArgs = ['-y',output];
-    
-    
-    if(config.pipeOutputTo){
-      outputArgs = ['-f','mp4', '-movflags','frag_keyframe+empty_moov+faststart', 'pipe:1'];
-    } 
-    ffmpegArgs = ffmpegArgs.concat(outputOptions).concat(outputArgs);
-    console.log(ffmpegArgs)
+    ffmpegArgs = ffmpegArgs.concat(outputOptions);
+    if (config.outputStream) {
+      let outputStreamOptions = config.outputStreamOptions || {};
+      let outputStreamArgs = ['-f', outputStreamOptions.format || 'mp4'];
+      let movflags = outputStreamOptions.movflags;
+      if (movflags === undefined) {
+        movflags = 'frag_keyframe+empty_moov+faststart';
+      }
+      if (movflags) {
+        outputStreamArgs = outputStreamArgs.concat(['-movflags', movflags]);
+      }
+      ffmpegArgs = ffmpegArgs.concat(outputStreamArgs).concat(['pipe:1']);
+    } else {
+      // by default just write out the file
+      // -y writes over existing files
+      ffmpegArgs = ffmpegArgs.concat(['-y', output]);
+    }
+
     convertProcess = spawn('ffmpeg', ffmpegArgs);
     convertProcess.stderr.setEncoding('utf8');
     convertProcess.stderr.on('data', function (data) {
@@ -166,12 +174,12 @@ module.exports = function (config) {
         processError = err;
         reject(err);
       });
-      if(config.pipeOutputTo){
+      if (config.outputStream) {
         convertProcess.stdout.on('error', function (err) {
           processError = err;
           reject(err);
         });
-        convertProcess.stdout.pipe(config.pipeOutputTo);
+        convertProcess.stdout.pipe(config.outputStream);
       }
     });
   };
@@ -205,7 +213,6 @@ module.exports = function (config) {
       log(err);
     }).then(function () {
       if (frameMode && !config.keepFrames) {
-        console.log("is deleting?")
         deleteFolder(frameDirectory);
       }
       if (overallError) {
