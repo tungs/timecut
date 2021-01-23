@@ -36,6 +36,7 @@ const commander = require('commander');
 const recorder = require('./index.js');
 const packageInfo = require('./package.json');
 
+var errors = [];
 commander
   .version(packageInfo.version, '-v, --version')
   .usage('<url> [options]')
@@ -45,8 +46,30 @@ commander
   .option('--frames <count>', 'Number of frames to capture', parseInt)
   .option('-S, --selector <selector>', 'CSS Selector of item to capture')
   .option('-V, --viewport <dimensions>', 'Viewport dimensions, in pixels (e.g. 800,600)', function (str) {
-    var dims = str.split(',').map(function (d) { return parseInt(d); });
-    return dims.length > 1 ? { width: dims[0], height: dims[1] } : { width: dims[0] };
+    var viewportComponents = str.split(',');
+    var dims = viewportComponents.filter(c => !c.includes('=')).map(c => parseInt(c));
+    var parsers = {
+      deviceScaleFactor: JSON.parse,
+      isMobile: JSON.parse,
+      hasTouch: JSON.parse,
+      width: parseInt,
+      height: parseInt,
+      isLandscape: JSON.parse
+    };
+    var viewport = {
+      width: dims[0],
+      height: dims[1]
+    };
+    viewportComponents.filter(c => c.includes('=')).forEach(c => {
+      var components = c.split('=');
+      var key = components[0].trim();
+      if (!parsers[key]) {
+        errors.push('Unknown viewport configuration key ' + key);
+      } else {
+        viewport[key] = parsers[key](components[1]);
+      }
+    });
+    return viewport;
   })
   .option('--transparent-background', 'Allow transparent backgrounds (only works for certain encodings)')
   .option('--frame-cache [directory]', 'Save frames in a temporary directory before processing')
@@ -87,4 +110,12 @@ commander
   .parse(process.argv);
 
 commander.url = commander.args[0] || 'index.html';
+
+if (errors.length && !commander.quiet) {
+  errors.forEach(e => {
+    // eslint-disable-next-line no-console
+    console.error(e);
+  });
+}
+
 recorder(commander);
