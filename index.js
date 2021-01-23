@@ -1,7 +1,7 @@
 /**
  * BSD 3-Clause License
  *
- * Copyright (c) 2018-2020, Steve Tung
+ * Copyright (c) 2018-2021, Steve Tung
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -80,6 +80,8 @@ module.exports = function (config) {
   var processError;
   var outputPattern;
   var convertProcess, processPromise;
+  var extension;
+  var screenshotType = (config.screenshotType || 'png');
   if (frameMode) {
     if (!frameDirectory) {
       frameDirectory = 'timecut-' + (config.keepFrames ? 'frames-' : 'temp-') + (new Date()).getTime();
@@ -88,7 +90,8 @@ module.exports = function (config) {
       frameDirectory = path.join(config.frameCache, frameDirectory);
     }
     frameDirectory = path.resolve(path.parse(output).dir, frameDirectory);
-    outputPattern = path.resolve(frameDirectory, 'image-%09d.png');
+    extension = '.' + screenshotType;
+    outputPattern = path.resolve(frameDirectory, 'image-%09d' + extension);
   } else {
     outputPattern = '';
   }
@@ -126,7 +129,14 @@ module.exports = function (config) {
       ffmpegArgs = ffmpegArgs.concat(['-framerate', fps]);
     }
 
-    ffmpegArgs = ffmpegArgs.concat(['-i', input]);
+    if (pipeMode && (screenshotType === 'jpeg' || screenshotType === 'jpg')) {
+      // piping jpegs with the other method can cause an error
+      // this is intended to fix that
+      ffmpegArgs = ffmpegArgs.concat(['-f', 'image2pipe', '-vcodec', 'mjpeg', '-i', '-']);
+    } else {
+      ffmpegArgs = ffmpegArgs.concat(['-i', input]);
+    }
+
     if (!argumentArrayContains(outputOptions, '-pix_fmt') && config.pixFmt) {
       ffmpegArgs = ffmpegArgs.concat(['-pix_fmt', config.pixFmt]);
     }
@@ -176,6 +186,7 @@ module.exports = function (config) {
     };
   }
 
+  var overallError;
   return timesnap(timesnapConfig)
     .then(function () {
       if (convertProcess) {
@@ -190,11 +201,15 @@ module.exports = function (config) {
         return makeProcessPromise();
       }
     }).catch(function (err) {
+      overallError = err;
       log(err);
     }).then(function () {
       if (frameMode && !config.keepFrames) {
         console.log("is deleting?")
         deleteFolder(frameDirectory);
+      }
+      if (overallError) {
+        throw overallError;
       }
     });
 };
