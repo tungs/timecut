@@ -1,7 +1,7 @@
 /**
  * BSD 3-Clause License
  *
- * Copyright (c) 2018-2020, Steve Tung
+ * Copyright (c) 2018-2021, Steve Tung
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
