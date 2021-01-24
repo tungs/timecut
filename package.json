@@ -21,7 +21,6 @@
   },
   "license": "BSD-3-Clause",
   "dependencies": {
-    "commander": "^2.11.0",
     "timesnap": "0.1.4"
   },
   "devDependencies": {
