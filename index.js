@@ -30,7 +30,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-const timesnap = require('timesnap');
+const timesnap = require('timesnap-core');
 const path = require('path');
 const fs = require('fs');
 const spawn = require('child_process').spawn;

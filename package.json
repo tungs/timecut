@@ -16,12 +16,9 @@
   "scripts": {
     "lint": "eslint *.js"
   },
-  "bin": {
-    "timecut": "./cli.js"
-  },
   "license": "BSD-3-Clause",
   "dependencies": {
-    "timesnap": "0.1.4"
+    "timesnap-core": "0.1.4"
   },
   "devDependencies": {
     "eslint": "^6.8.0"
