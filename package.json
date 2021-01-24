@@ -1,10 +1,10 @@
 {
-  "name": "timecut",
-  "version": "0.1.4",
+  "name": "timecut-core",
+  "version": "0.1.4-prerelease",
   "description": "Record smooth movies of web pages",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tungs/timecut.git"
+    "url": "https://github.com/tungs/timecut/tree/core"
   },
   "author": {
     "name": "Steve Tung"
