@@ -4,9 +4,9 @@
 
 # timecut-core
 
-**timecut-core** is a version of timecut that uses [timesnap-core](https://github.com/tungs/timesnap/tree/core) which does not automatically bundle puppeteer. It differs from `timecut` by requiring a [`config.launcher`](#js-config-launcher) function or a [`config.browser`](#js-config-browser) object to be passed, and does not have a command line interface. It's stored on the [`core`](https://github.com/tungs/timecut/tree/core) branch of `timecut` and derived from its code. All pull requests should be based on the main branches of `timecut` and `timesnap` instead of the core branches, unless in the rare event that it's particular only to the core branches.
+**timecut-core** is a version of timecut that uses [timesnap-core](https://github.com/tungs/timesnap/tree/core#timesnap-core) which does not automatically bundle puppeteer. It differs from `timecut` by requiring a [`config.launcher`](#js-config-launcher) function or a [`config.browser`](#js-config-browser) object to be passed, and does not have a command line interface. It's stored on the [`core`](https://github.com/tungs/timecut/tree/core#timecut-core) branch of `timecut` and derived from its code. All pull requests should be based on the main branches of `timecut` and `timesnap` instead of the core branches, unless in the rare event that it's particular only to the core branches.
 
-To only record screenshots and save them as pictures, see **[timesnap](https://github.com/tungs/timesnap)** and **[timesnap-core](https://github.com/tungs/timesnap/tree/core)**.
+To only record screenshots and save them as pictures, see **[timesnap](https://github.com/tungs/timesnap)** and **[timesnap-core](https://github.com/tungs/timesnap/tree/core#timesnap-core)**.
 
 ## <a name="limitations" href="#limitations">#</a> **timecut** and **timesnap** Limitations
 **timesnap** (and **timecut** by extension) only overwrites JavaScript functions and video playback, so pages where changes occur via other means (e.g. through transitions/animations from CSS rules) will likely not render as intended.
