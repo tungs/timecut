@@ -240,7 +240,7 @@ var pages = [
 
 ### <a name="node-api" href="#node-api">#</a> Node API
 
-The Node API is structured similarly to the command line options, but there are a few options for the Node API that are not accessible through the command line interface: [`config.logToStdErr`](#js-config-log-to-std-err), [`config.navigatePageToURL`](#js-config-navigate-page-to-url), [`config.preparePage`](#js-config-prepare-page), [`config.preparePageForScreenshot`](#js-config-prepare-page-for-screenshot), [`config.logger`](#js-config-logger), and certain [`config.viewport`](#js-config-viewport) properties.
+The Node API is structured similarly to the command line options, but there are a few options for the Node API that are not accessible through the command line interface: [`config.logToStdErr`](#js-config-log-to-std-err), [`config.navigatePageToURL`](#js-config-navigate-page-to-url), [`config.preparePage`](#js-config-prepare-page), [`config.preparePageForScreenshot`](#js-config-prepare-page-for-screenshot), [`config.outputStream`](#js-config-output-stream), [`config.logger`](#js-config-logger), and certain [`config.viewport`](#js-config-viewport) properties.
 
 **timecut(config)**
 *  <a name="js-api-config" href="#js-api-config">#</a> `config` &lt;[Object][]&gt;
@@ -295,7 +295,11 @@ The Node API is structured similarly to the command line options, but there are 
     * <a name="js-config-prepare-page-for-screenshot" href="#js-config-prepare-page-for-screenshot">#</a> `preparePageForScreenshot` &lt;[function][]([Page][], [number][], [number][])&gt; A setup function that will be called before each screenshot. If it returns a promise, capture will be paused until the promise resolves.
         * `page` &lt;[Page][]&gt; The puppeteer instance of the page being captured.
         * `frameNumber` &lt;[number][]&gt; The current frame number (1 based).
-        * `totalFrames` &lt;[number][]&gt; The total number of frames.
+        * `totalFrames` &lt;[number][]&gt; The total number of frames.             
+    * <a name="js-config-output-stream" href="#js-config-output-stream">#</a> `outputStream` &lt;[stream][]()&gt; A node stream to write data to from ffmpeg
+    * <a name="js-config-output-stream-options" href="#js-config-output-stream-options">#</a> `outputStreamOptions` &lt;[Object][]&gt; Optional configuration object when using [`config.outputStream`](#js-config-output-stream)
+        * <a name="js-config-output-stream-options-format" href="#js-config-output-stream-options-format">#</a> `format` &lt;[string][]&gt; Format of piped output. Defaults to `'mp4'` if undefined.
+        * <a name="js-config-output-stream-options-movflags" href="#js-config-output-stream-options-movflags">#</a> `movflags` &lt;[string][]&gt; String representing MOV muxer flags to pass via `-movflags` argument. Defaults to `'frag_keyframe+empty_moov+faststart'` if undefined.
 * <a name="js-api-return" href="#js-api-return">#</a> returns: &lt;[Promise][]&gt; resolves after all the frames have been captured.
 
 ## <a name="modes" href="#modes">#</a> **timecut** Modes
@@ -322,3 +326,4 @@ This work was inspired by [a talk by Noah Veltman](https://github.com/veltman/d3
 [function]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions
 [CSS selector]: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors
 [Page]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-page
+[stream]: https://nodejs.org/api/stream.html
