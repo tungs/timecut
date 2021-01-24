@@ -2,21 +2,17 @@
 
 **timecut** is a Node.js program that records smooth videos of web pages that use JavaScript animations. It uses **[timesnap](https://github.com/tungs/timesnap)** and [puppeteer](https://github.com/GoogleChrome/puppeteer) to open a web page, overwrite its time-handling functions, take snapshots of the web page, and then passes the results to ffmpeg to encode those frames into a video. This allows for slower-than-realtime and/or virtual high-fps capture of frames, while the resulting video is smooth.
 
-You can run **timecut** from the command line or as a Node.js library. It requires ffmpeg, Node v8.9.0 or higher, and npm.
+# timecut-core
 
-To only record screenshots and save them as pictures, see **[timesnap](https://github.com/tungs/timesnap)**.
+**timecut-core** is a version of timecut that uses [timesnap-core](https://github.com/tungs/timesnap/tree/core#timesnap-core) which does not automatically bundle puppeteer. It differs from `timecut` by requiring a [`config.launcher`](#js-config-launcher) function or a [`config.browser`](#js-config-browser) object to be passed, and does not have a command line interface. It's stored on the [`core`](https://github.com/tungs/timecut/tree/core#timecut-core) branch of `timecut` and derived from its code. All pull requests should be based on the main branches of `timecut` and `timesnap` instead of the core branches, unless in the rare event that it's particular only to the core branches.
+
+To only record screenshots and save them as pictures, see **[timesnap](https://github.com/tungs/timesnap)** and **[timesnap-core](https://github.com/tungs/timesnap/tree/core#timesnap-core)**.
 
 ## <a name="limitations" href="#limitations">#</a> **timecut** and **timesnap** Limitations
 **timesnap** (and **timecut** by extension) only overwrites JavaScript functions and video playback, so pages where changes occur via other means (e.g. through transitions/animations from CSS rules) will likely not render as intended.
 
 ## Read Me Contents
 
-* [From the Command Line](#from-cli)
-  * [Global Install and Use](#cli-global-install)
-  * [Local Install and Use](#cli-local-install)
-  * [Command Line *url*](#cli-url-use)
-  * [Command Line Examples](#cli-examples)
-  * [Command Line *options*](#cli-options)
 * [From Node.js](#from-node)
   * [Node Install](#node-install)
   * [Node Examples](#node-examples)
@@ -24,174 +20,32 @@ To only record screenshots and save them as pictures, see **[timesnap](https://g
 * [timecut Modes](#modes)
 * [How it works](#how-it-works)
 
-## <a name="from-cli" href="#from-cli">#</a> From the Command Line
-
-### <a name="cli-global-install" href="#cli-global-install">#</a> Global Install and Use
-
-To install:
-
-Due to [an issue in puppeteer](https://github.com/GoogleChrome/puppeteer/issues/375) with permissions, timecut is not supported for global installation for root. You can configure `npm` to install global packages for a specific user following this guide: https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-two-change-npms-default-directory
-
-After configuring, run:
-```
-npm install -g timecut
-```
-
-To use:
-```
-timecut "url" [options]
-```
-
-### <a name="cli-local-install" href="#cli-local-install">#</a> Local Install and Use
-
-To install:
-
-```
-cd /path/to/installation/directory
-npm install timecut
-```
-
-To use:
-```
-node /path/to/installation/directory/node_modules/timecut/cli.js "url" [options]
-```
-
-*Alternatively*:
-
-To install:
-
-
-```
-cd /path/to/installation/directory
-git clone https://github.com/tungs/timecut.git
-cd timecut
-npm install
-```
-
-To use:
-```
-node /path/to/installation/directory/timecut/cli.js "url" [options]
-```
-
-### <a name="cli-url-use" href="#cli-url-use">#</a> Command Line *url*
-The url can be a web url (e.g. `https://github.com`) or a file path, with relative paths resolving in the current working directory. If no url is specified, defaults to `index.html`. Remember to enclose urls that contain special characters (like `#` and `&`) with quotes.
-
-### <a name="cli-examples" href="#cli-examples">#</a> Command Line Examples
-
-**<a name="cli-example-default" href="#cli-example-default">#</a> Default behavior**:
-```
-timecut
-```
-Opens `index.html` in the current working directory, sets the viewport to 800x600, captures at 60 frames per second for 5 virtual seconds (temporarily saving each frame), and saves `video.mp4` with the `yuv420p` pixel format in the current working directory. The defaults may change in the future, so for long-term scripting, it's a good idea to explicitly pass these options, like in the following example.
-
-**<a name="cli-example-viewport-fps-duration-mode-output" href="#cli-example-viewport-fps-duration-mode-output">#</a> Setting viewport size, frames per second, duration, mode, and output**:
-```
-timecut index.html --viewport=800,600 --fps=60 --duration=5 \
-  --frame-cache --pix-fmt=yuv420p --output=video.mp4
-```
-Equivalent to the current default `timecut` invocation, but with explicit options. Opens `index.html` in the current working directory, sets the viewport to 800x600, captures at 60 frames per second for 5 virtual seconds (temporarily saving each frame), and saves the resulting video using the pixel format `yuv420p` as `video.mp4`.
-
-**<a name="cli-example-selector" href="#cli-example-selector">#</a> Using a selector**:
-```
-timecut drawing.html -S "canvas,svg"
-```
-Opens `drawing.html` in the current working directory, crops each frame to the bounding box of the first canvas or svg element, and captures frames using default settings (5 seconds @ 60fps saving to `video.mp4`).
-
-**<a name="cli-example-offsets" href="#cli-example-offsets">#</a> Using offsets**:
-```
-timecut "https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=random" \ 
-  -S "#container" \ 
-  --left=20 --top=40 --right=6 --bottom=30 \
-  --duration=20
-```
-Opens https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=random (note the quotes in the url and selector are necessary because of the `#` and `&`). Crops each frame to the `#container` element, with an additional crop of 20px, 40px, 6px, and 30px for the left, top, right, and bottom, respectively. Captures frames for 20 virtual seconds at 60fps to `video.mp4` in the current working directory.
-
-### <a name="cli-options" href="#cli-options">#</a> Command Line *options*
-* <a name="cli-options-output" href="#cli-options-output">#</a> Output: `-O`, `--output` *name*
-    * Tells ffmpeg to save the video as *name*. Its file extension determines encoding if not explicitly specified.
-* <a name="cli-options-fps" href="#cli-options-fps">#</a> Frame Rate: `-R`, `--fps` *frame rate*
-    * Frame rate (in frames per virtual second) of capture (default: `60`).
-* <a name="cli-options-duration" href="#cli-options-duration">#</a> Duration: `-d`, `--duration` *seconds*
-    * Duration of capture, in *seconds* (default: `5`).
-* <a name="cli-options-frames" href="#cli-options-frames">#</a> Frames: `--frames` *count*
-    * Number of frames to capture.
-* <a name="cli-options-selector" href="#cli-options-selector">#</a> Selector: `-S`, `--selector` "*selector*"
-    * Crops each frame to the bounding box of the first item found by the [CSS *selector*][CSS selector].
-* <a name="cli-options-viewport" href="#cli-options-viewport">#</a> Viewport: `-V`, `--viewport` *dimensions*
-    * Viewport dimensions, in pixels. For example `800` (for width) or `800,600` (for width and height).
-* <a name="cli-options-frame-cache" href="#cli-options-frame-cache">#</a> Frame Cache: `--frame-cache` *[directory]*
-    * Saves each frame temporarily to disk before ffmpeg processes it. If *directory* is not specified, temporarily creates one in the current working directory. Enabled by default. See [cache frame mode](#cache-frame-mode).
-* <a name="cli-options-pipe-mode" href="#cli-options-pipe-mode">#</a> Pipe Mode: `--pipe-mode`
-    * Experimental. Pipes frames directly to ffmpeg, without saving to disk. See [pipe mode](#pipe-mode).
-* <a name="cli-options-canvas-capture-mode" href="#cli-options-canvas-capture-mode">#</a> Canvas Mode: `--canvas-capture-mode` *\[format\]*
-    * Experimental. Captures images from canvas data instead of screenshots. See [canvas capture mode](#canvas-capture-mode). Can provide an optional image format (e.g. `png`), otherwise it uses the saved image's extension, or defaults to `png` if the format is not specified or supported. Can prefix the format with `immediate:` (e.g. `immediate:png`) to immediately capture pixel data after rendering, which is sometimes needed for some WebGL renderers. Specify the canvas [using the `--selector` option](#cli-options-selector), otherwise it defaults to the first canvas in the document.
-* <a name="cli-options-start" href="#cli-options-start">#</a> Start: `-s`, `--start` *n seconds*
-    * Runs code for n virtual seconds before saving any frames (default: `0`).
-* <a name="cli-options-x-offset" href="#cli-options-x-offset">#</a> X Offset: `-x`, `--x-offset` *pixels*
-    * X offset of capture, in pixels (default: `0`).
-* <a name="cli-options-y-offset" href="#cli-options-y-offset">#</a> Y Offset: `-y`, `--y-offset` *pixels*
-    * Y offset of capture, in pixels (default: `0`).
-* <a name="cli-options-width" href="#cli-options-width">#</a> Width: `-W`, `--width` *pixels*
-    * Width of capture, in pixels.
-* <a name="cli-options-height" href="#cli-options-height">#</a> Height: `-H`, `--height` *pixels*
-    * Height of capture, in pixels.
-* <a name="cli-options-no-round-to-even-width" href="#cli-options-no-round-to-even-width">#</a> No Even Width Rounding: `--no-round-to-even-width`
-    * Disables automatic rounding of capture width up to the nearest even number.
-* <a name="cli-options-no-round-to-even-height" href="#cli-options-no-round-to-even-height">#</a> No Even Height Rounding: `--no-round-to-even-height`
-    * Disables automatic rounding of capture height up to the nearest even number.
-* <a name="cli-options-transparent-background" href="#cli-options-transparent-background">#</a> Transparent Background: `--transparent-background`
-    * Allows background to be transparent if there is no background styling. Only works if the output video format supports transparency.
-* <a name="cli-options-left" href="#cli-options-left">#</a> Left: `-l`, `--left` *pixels*
-    * Left edge of capture, in pixels. Equivalent to `--x-offset`.
-* <a name="cli-options-right" href="#cli-options-right">#</a> Right: `-r`, `--right` *pixels*
-    * Right edge of capture, in pixels. Ignored if `width` is specified.
-* <a name="cli-options-top" href="#cli-options-top">#</a> Top: `-t`, `--top` *pixels*
-    * Top edge of capture, in pixels. Equivalent to `--y-offset`.
-* <a name="cli-options-bottom" href="#cli-options-bottom">#</a> Bottom: `-b`, `--bottom` *pixels*
-    * Bottom edge of capture, in pixels. Ignored if `height` is specified.
-* <a name="cli-options-unrandomize" href="#cli-options-unrandomize">#</a> Unrandomize: `-u`, `--unrandomize` *\[seeds\]*
-    * Overwrites `Math.random` with a seeded pseudorandom number generator. Can provide optional seeds as up to four comma separated integers (e.g. `--unrandomize 2,3,5,7` or `--unrandomize 42`). If `seeds` is `random-seed` (i.e. `--unrandomize random-seed`), a random seed will be generated, displayed (if not in quiet mode), and used. If `seeds` is not provided, it uses the seeds `10,0,20,0`.
-* <a name="cli-options-executable-path" href="#cli-options-executable-path">#</a> Executable Path: `--executable-path` *path*
-    * Uses the Chromium/Chrome instance at *path* for puppeteer.
-* <a name="cli-options-launch-arguments" href="#cli-options-launch-arguments">#</a> Puppeteer Launch Arguments: `-L`, `--launch-arguments` *arguments*
-    * Arguments to pass to Puppeteer/Chromium, enclosed in quotes. Example: `--launch-arguments="--single-process"`. A list of arguments can be found [here](https://peter.sh/experiments/chromium-command-line-switches).
-* <a name="cli-options-no-headless" href="#cli-options-no-headless">#</a> No Headless: `--no-headless`
-    * Runs Chromium/Chrome in windowed mode.
-* <a name="cli-options-screenshot-type" href="#cli-options-screenshot-type">#</a> Screenshot Type: `--screenshot-type` *type*
-    * Output image format for the screenshots. By default, `png` is used. `jpeg` is also available.
-* <a name="cli-options-screenshot-quality" href="#cli-options-screenshot-quality">#</a> Screenshot Quality: `--screenshot-quality` *number*
-    * Quality level between 0 to 1 for lossy screenshots. Defaults to 0.92 when in [canvas capture mode](#cli-options-canvas-capture-mode) and 0.8 otherwise.
-* <a name="cli-options-extra-input-options" href="#cli-options-extra-input-options">#</a> Extra input options: `-e`, `--input-options` *options*
-    * Extra arguments for ffmpeg input, enclosed in quotes. Example: `--input-options="-framerate 30"`
-* <a name="cli-options-extra-output-options" href="#cli-options-extra-output-options">#</a> Extra output options: `-E`, `--output-options` *options*
-    * Extra arguments for ffmpeg output, enclosed in quotes. Example: `--output-options="-vf scale=320:240"`
-* <a name="cli-options-pixel-format" href="#cli-options-pixel-format">#</a> Pixel Format: `--pix-fmt` *pixel format*
-    * Pixel format for output video (default: `yuv420p`).
-* <a name="cli-options-start-delay" href="#cli-options-start-delay">#</a> Start Delay: `--start-delay` *n seconds*
-    * Waits *n real seconds* after loading the page before starting to capture.
-* <a name="cli-options-keep-frames" href="#cli-options-keep-frames">#</a> Keep Frames: `--keep-frames`
-    * Doesn't delete frames after processing them. Doesn't do anything in pipe mode.
-* <a name="cli-options-quiet" href="#cli-options-quiet">#</a> Quiet: `-q`, `--quiet`
-    * Suppresses console logging.
-* <a name="cli-options-version" href="#cli-options-version">#</a> Version: `-v`, `--version`
-    * Displays version information. Immediately exits.
-* <a name="cli-options-help" href="#cli-options-help">#</a> Help: `-h`, `--help`
-    * Displays command line options. Immediately exits.
-
 ## <a name="from-node" href="#from-node">#</a> From Node.js
-**timecut** can also be included as a library inside Node.js programs.
 
 ### <a name="node-install" href="#node-install">#</a> Node Install
 ```
-npm install timecut --save
+npm install timecut-core --save
 ```
+
+`timecut-core` also requires ffmpeg to be installed.
 
 ### <a name="node-examples" href="#node-examples">#</a> Node Examples
 
+For these examples, we'll use puppeteer version 2.1.1, which doesn't require additional libraries, beyond ffmpeg, to be installed.
+
+```
+npm install puppeteer@2.1.1 --save
+```
+
 **<a name="node-example-basic" href="#node-example-basic">#</a> Basic Use:**
+
+Specify a [`config.launcher`](#js-config-launcher) function that creates a browser instance with certain launch options.
+
 ```node
-const timecut = require('timecut');
+const timecut = require('timecut-core');
+const puppeteer = require('puppeteer');
 timecut({
+  launcher: launchOptions => puppeteer.launch(launchOptions),
   url: 'https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=random',
   viewport: {
     width: 800,               // sets the viewport (window size) to 800x600
@@ -208,34 +62,21 @@ timecut({
 });
 ```
 
-**<a name="node-example-multiple" href="#node-example-multiple">#</a> Multiple pages:**
+**<a name="node-example-browser" href="#node-example-browser">#</a> Using `config.browser`:**
+
+You can also use [`config.browser`](#js-config-browser), though it might ignore / disable some launch options like [`config.quiet`](#js-config-quiet), [`config.logToStdErr`](#js-config-log-to-std-err), [`config.headless`](#js-config-headless), [`config.executablePath`](#js-config-executable-path), and [`config.launchArguments`](#js-config-launch-arguments). You can specify custom launch arguments through `puppeteer.launch()`.
+
 ```node
-const timecut = require('timecut');
-var pages = [
-  {
-    url: 'https://tungs.github.io/truchet-tiles-original/#autoplay=true',
-    output: 'truchet-tiles.mp4',
-    selector: '#container'
-  }, {
-    url: 'https://breathejs.org/examples/Drawing-US-Counties.html',
-    output: 'counties.mp4',
-    selector: null // with no selector, it defaults to the viewport dimensions
-  }
-];
-(async () => {
-  for (let page of pages) {
-    await timecut({
-      url: page.url,
-      output: page.output,
-      selector: page.selector,
-      viewport: {
-        width: 800,
-        height: 600
-      },
-      duration: 20
-    });
-  }
-})();
+const timecut = require('timecut-core');
+const puppeteer = require('puppeteer');
+timecut({
+  browser: puppeteer.launch({ dumpio: true }), // can add custom launch options here
+  url: 'https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=random',
+  selector: '#container',
+  output: 'truchet-tiles.mp4'
+}).then(function () {
+  console.log('Done!');
+});
 ```
 
 ### <a name="node-api" href="#node-api">#</a> Node API
@@ -244,6 +85,8 @@ The Node API is structured similarly to the command line options, but there are 
 
 **timecut(config)**
 *  <a name="js-api-config" href="#js-api-config">#</a> `config` &lt;[Object][]&gt;
+    * <a name="js-config-launcher" href="#js-config-launcher">#</a> `launcher` &lt;[function][]([Object][])&gt; A function that returns or resolves a puppeteer or puppeteer-like browser. It is passed a [launch options argument](https://github.com/puppeteer/puppeteer/blob/main/docs/api.md#puppeteerlaunchoptions), which should be passed to `puppeteer.launch`, if possible.
+    * <a name="js-config-browser" href="#js-config-browser">#</a> `browser` &lt;[Object][]&gt; The instance of a puppeteer or puppeteer-like browser. Note that certain configuration options might not work as intended or might be ignored, like [`config.quiet`](#js-config-quiet), [`config.logToStdErr`](#js-config-log-to-std-err), [`config.headless`](#js-config-headless), [`config.executablePath`](#js-config-executable-path), and [`config.launchArguments`](#js-config-launch-arguments).
     * <a name="js-config-url" href="#js-config-url">#</a> `url` &lt;[string][]&gt; The url to load. It can be a web url, like `https://github.com` or a file path, with relative paths resolving in the current working directory (default: `index.html`).
     * <a name="js-config-output" href="#js-config-output">#</a> `output` &lt;[string][]&gt; Tells ffmpeg to save the video as *name*.  Its file extension determines encoding if not explicitly specified. Default name: `video.mp4`.
     * <a name="js-config-fps" href="#js-config-fps">#</a> `fps` &lt;[number][]&gt; frame rate, in frames per virtual second, of capture (default: `60`).
