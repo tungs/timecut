@@ -2,6 +2,8 @@
 
 **timecut** is a Node.js program that records smooth videos of web pages that use JavaScript animations. It uses **[timesnap](https://github.com/tungs/timesnap)** and [puppeteer](https://github.com/GoogleChrome/puppeteer) to open a web page, overwrite its time-handling functions, take snapshots of the web page, and then passes the results to ffmpeg to encode those frames into a video. This allows for slower-than-realtime and/or virtual high-fps capture of frames, while the resulting video is smooth.
 
+It requires ffmpeg, Node v8.9.0 or higher, and npm.
+
 # timecut-core
 
 **timecut-core** is a version of timecut that uses [timesnap-core](https://github.com/tungs/timesnap/tree/core#timesnap-core) which does not automatically bundle puppeteer. It differs from `timecut` by requiring a [`config.launcher`](#js-config-launcher) function or a [`config.browser`](#js-config-browser) object to be passed, and does not have a command line interface. It's stored on the [`core`](https://github.com/tungs/timecut/tree/core#timecut-core) branch of `timecut` and derived from its code. All pull requests should be based on the main branches of `timecut` and `timesnap` instead of the core branches, unless in the rare event that it's particular only to the core branches.
@@ -31,7 +33,7 @@ npm install timecut-core --save
 
 ### <a name="node-examples" href="#node-examples">#</a> Node Examples
 
-For these examples, we'll use puppeteer version 2.1.1, which doesn't require additional libraries, beyond ffmpeg, to be installed.
+For these examples, we'll use puppeteer version 2.1.1, which requires fewer additional libraries to be installed. ffmpeg also needs to be installed.
 
 ```
 npm install puppeteer@2.1.1 --save
