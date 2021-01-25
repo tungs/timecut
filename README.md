@@ -1,13 +1,13 @@
 # timecut
 
-**timecut** is a Node.js program that records smooth videos of web pages that use JavaScript animations. It uses **[timesnap](https://github.com/tungs/timesnap)** and [puppeteer](https://github.com/GoogleChrome/puppeteer) to open a web page, overwrite its time-handling functions, take snapshots of the web page, and then passes the results to ffmpeg to encode those frames into a video. This allows for slower-than-realtime and/or virtual high-fps capture of frames, while the resulting video is smooth.
+**timecut** is a Node.js program that records smooth videos of web pages that use JavaScript animations. It uses **[timeweb](https://github.com/tungs/timeweb)**, **[timesnap](https://github.com/tungs/timesnap)**, and [puppeteer](https://github.com/GoogleChrome/puppeteer) to open a web page, overwrite its time-handling functions, take snapshots of the web page, and then passes the results to ffmpeg to encode those frames into a video. This allows for slower-than-realtime and/or virtual high-fps capture of frames, while the resulting video is smooth.
 
 You can run **timecut** from the command line or as a Node.js library. It requires ffmpeg, Node v8.9.0 or higher, and npm.
 
-To only record screenshots and save them as pictures, see **[timesnap](https://github.com/tungs/timesnap)**.
+To only record screenshots and save them as pictures, see **[timesnap](https://github.com/tungs/timesnap)**. For using virtual time in browser, see **[timeweb](https://github.com/tungs/timeweb)**.
 
-## <a name="limitations" href="#limitations">#</a> **timecut** and **timesnap** Limitations
-**timesnap** (and **timecut** by extension) only overwrites JavaScript functions and video playback, so pages where changes occur via other means (e.g. through transitions/animations from CSS rules) will likely not render as intended.
+## <a name="limitations" href="#limitations">#</a> **timeweb**, **timecut**, and **timesnap** Limitations
+**timeweb** (and **timesnap** and **timecut** by extension) only overwrites JavaScript functions and video playback, so pages where changes occur via other means (e.g. through transitions/animations from CSS rules) will likely not render as intended.
 
 ## Read Me Contents
 
