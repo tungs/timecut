@@ -86,7 +86,7 @@ Opens `index.html` in the current working directory, sets the viewport to 800x60
 
 **<a name="cli-example-viewport-fps-duration-mode-output" href="#cli-example-viewport-fps-duration-mode-output">#</a> Setting viewport size, frames per second, duration, mode, and output**:
 ```
-timecut index.html --viewport=800,600 --fps=60 --duration=5 \
+timecut index.html --viewport="800,600" --fps=60 --duration=5 \
   --frame-cache --pix-fmt=yuv420p --output=video.mp4
 ```
 Equivalent to the current default `timecut` invocation, but with explicit options. Opens `index.html` in the current working directory, sets the viewport to 800x600, captures at 60 frames per second for 5 virtual seconds (temporarily saving each frame), and saves the resulting video using the pixel format `yuv420p` as `video.mp4`.
@@ -118,7 +118,7 @@ Opens https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=
 * <a name="cli-options-selector" href="#cli-options-selector">#</a> Selector: `-S`, `--selector` "*selector*"
     * Crops each frame to the bounding box of the first item found by the [CSS *selector*][CSS selector].
 * <a name="cli-options-viewport" href="#cli-options-viewport">#</a> Viewport: `-V`, `--viewport` *dimensions*
-    * Viewport dimensions, in pixels. For example `800` (for width) or `800,600` (for width and height).
+    * Viewport dimensions, in pixels, followed by optional keys. For example, `800` (for width), or `"800,600"` (for width and height), or `"800,600,deviceScaleFactor=2"` for (width, height, and deviceScaleFactor). When running in Windows, quotes may be necessary for parsing commas. For a list of optional keys, see [`config.viewport`](#js-config-viewport).
 * <a name="cli-options-frame-cache" href="#cli-options-frame-cache">#</a> Frame Cache: `--frame-cache` *[directory]*
     * Saves each frame temporarily to disk before ffmpeg processes it. If *directory* is not specified, temporarily creates one in the current working directory. Enabled by default. See [cache frame mode](#cache-frame-mode).
 * <a name="cli-options-pipe-mode" href="#cli-options-pipe-mode">#</a> Pipe Mode: `--pipe-mode`
