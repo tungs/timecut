@@ -1,6 +1,6 @@
 # timecut
 
-**timecut** is a Node.js program that records smooth videos of web pages that use JavaScript animations. It uses **[timesnap](https://github.com/tungs/timesnap)** and [puppeteer](https://github.com/GoogleChrome/puppeteer) to open a web page, overwrite its time-handling functions, take snapshots of the web page, and then passes the results to ffmpeg to encode those frames into a video. This allows for slower-than-realtime and/or virtual high-fps capture of frames, while the resulting video is smooth.
+**timecut** is a Node.js program that records smooth videos of web pages that use JavaScript animations. It uses **[timeweb](https://github.com/tungs/timeweb)**, **[timesnap](https://github.com/tungs/timesnap)**, and [puppeteer](https://github.com/GoogleChrome/puppeteer) to open a web page, overwrite its time-handling functions, take snapshots of the web page, and then passes the results to ffmpeg to encode those frames into a video. This allows for slower-than-realtime and/or virtual high-fps capture of frames, while the resulting video is smooth.
 
 It requires ffmpeg, Node v8.9.0 or higher, and npm.
 
@@ -8,10 +8,10 @@ It requires ffmpeg, Node v8.9.0 or higher, and npm.
 
 **timecut-core** is a version of timecut that uses [timesnap-core](https://github.com/tungs/timesnap/tree/core#timesnap-core) which does not automatically bundle puppeteer. It differs from `timecut` by requiring a [`config.launcher`](#js-config-launcher) function or a [`config.browser`](#js-config-browser) object to be passed, and does not have a command line interface. It's stored on the [`core`](https://github.com/tungs/timecut/tree/core#timecut-core) branch of `timecut` and derived from its code. All pull requests should be based on the main branches of `timecut` and `timesnap` instead of the core branches, unless in the rare event that it's particular only to the core branches.
 
-To only record screenshots and save them as pictures, see **[timesnap](https://github.com/tungs/timesnap)** and **[timesnap-core](https://github.com/tungs/timesnap/tree/core#timesnap-core)**.
+To only record screenshots and save them as pictures, see **[timesnap](https://github.com/tungs/timesnap)** and **[timesnap-core](https://github.com/tungs/timesnap/tree/core#timesnap-core)**. For using virtual time in browser, see **[timeweb](https://github.com/tungs/timeweb)**.
 
-## <a name="limitations" href="#limitations">#</a> **timecut** and **timesnap** Limitations
-**timesnap** (and **timecut** by extension) only overwrites JavaScript functions and video playback, so pages where changes occur via other means (e.g. through transitions/animations from CSS rules) will likely not render as intended.
+## <a name="limitations" href="#limitations">#</a> **timeweb**, **timecut**, and **timesnap** Limitations
+**timeweb** (and **timesnap** and **timecut** by extension) only overwrites JavaScript functions and video playback, so pages where changes occur via other means (e.g. through transitions/animations from CSS rules) will likely not render as intended.
 
 ## Read Me Contents
 
@@ -83,7 +83,7 @@ timecut({
 
 ### <a name="node-api" href="#node-api">#</a> Node API
 
-The Node API is structured similarly to the command line options, but there are a few options for the Node API that are not accessible through the command line interface: [`config.logToStdErr`](#js-config-log-to-std-err), [`config.preparePage`](#js-config-prepare-page), [`config.preparePageForScreenshot`](#js-config-prepare-page-for-screenshot), [`config.logger`](#js-config-logger), and certain [`config.viewport`](#js-config-viewport) properties.
+The Node API is structured similarly to the command line options, but there are a few options for the Node API that are not accessible through the command line interface: [`config.logToStdErr`](#js-config-log-to-std-err), [`config.navigatePageToURL`](#js-config-navigate-page-to-url), [`config.preparePage`](#js-config-prepare-page), [`config.preparePageForScreenshot`](#js-config-prepare-page-for-screenshot), [`config.outputStream`](#js-config-output-stream), [`config.logger`](#js-config-logger), and certain [`config.viewport`](#js-config-viewport) properties.
 
 **timecut(config)**
 *  <a name="js-api-config" href="#js-api-config">#</a> `config` &lt;[Object][]&gt;
@@ -132,12 +132,19 @@ The Node API is structured similarly to the command line options, but there are 
     * <a name="js-config-quiet" href="#js-config-quiet">#</a> `quiet` &lt;[boolean][]&gt; Suppresses console logging.
     * <a name="js-config-logger" href="#js-config-logger">#</a> `logger` &lt;[function][](...[Object][])&gt; Replaces console logging with a particular function. The passed arguments are the same as those to `console.log` (in this case, usually one string).
     * <a name="js-config-log-to-std-err" href="#js-config-log-to-std-err">#</a> `logToStdErr` &lt;[boolean][]&gt; Logs to stderr instead of stdout. Doesn't do anything if `config.quiet` is set to true.
+    * <a name="js-config-navigate-page-to-url" href="#js-config-navigate-page-to-url">#</a> `navigatePageToURL` &lt;[function][]([Object][])&gt; A function that navigates a puppeteer page to a URL, overriding the default navigation to a URL. The function should return a promise that resolves once the page is finished navigating. The function is passed the following object:
+        * <a name="js-config-navigate-page-to-url-page" href="#js-config-navigate-page-to-url-page">#</a> `page` &lt;[Page][]&gt; the puppeteer page
+        * <a name="js-config-navigate-page-to-url-url" href="#js-config-navigate-page-to-url-url">#</a> `url` &lt;[string][]&gt; the url to navigate to
     * <a name="js-config-prepare-page" href="#js-config-prepare-page">#</a> `preparePage` &lt;[function][]([Page][])&gt; A setup function that will be called one time before taking screenshots. If it returns a promise, capture will be paused until the promise resolves.
         * `page` &lt;[Page][]&gt; The puppeteer instance of the page being captured.
     * <a name="js-config-prepare-page-for-screenshot" href="#js-config-prepare-page-for-screenshot">#</a> `preparePageForScreenshot` &lt;[function][]([Page][], [number][], [number][])&gt; A setup function that will be called before each screenshot. If it returns a promise, capture will be paused until the promise resolves.
         * `page` &lt;[Page][]&gt; The puppeteer instance of the page being captured.
         * `frameNumber` &lt;[number][]&gt; The current frame number (1 based).
         * `totalFrames` &lt;[number][]&gt; The total number of frames.
+    * <a name="js-config-output-stream" href="#js-config-output-stream">#</a> `outputStream` &lt;[stream][]()&gt; A node stream to write data to from ffmpeg
+    * <a name="js-config-output-stream-options" href="#js-config-output-stream-options">#</a> `outputStreamOptions` &lt;[Object][]&gt; Optional configuration object when using [`config.outputStream`](#js-config-output-stream)
+        * <a name="js-config-output-stream-options-format" href="#js-config-output-stream-options-format">#</a> `format` &lt;[string][]&gt; Format of piped output. Defaults to `'mp4'` if undefined.
+        * <a name="js-config-output-stream-options-movflags" href="#js-config-output-stream-options-movflags">#</a> `movflags` &lt;[string][]&gt; String representing MOV muxer flags to pass via `-movflags` argument. Defaults to `'frag_keyframe+empty_moov+faststart'` if undefined.
 * <a name="js-api-return" href="#js-api-return">#</a> returns: &lt;[Promise][]&gt; resolves after all the frames have been captured.
 
 ## <a name="modes" href="#modes">#</a> **timecut** Modes
@@ -164,3 +171,4 @@ This work was inspired by [a talk by Noah Veltman](https://github.com/veltman/d3
 [function]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions
 [CSS selector]: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors
 [Page]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-page
+[stream]: https://nodejs.org/api/stream.html
