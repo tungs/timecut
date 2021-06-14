@@ -62,7 +62,7 @@ const argumentArrayContains = function (args, item) {
   }, false);
 };
 
-module.exports = function (config) {
+module.exports = async function (config) {
   config = Object.assign({
     roundToEvenWidth: true,
     roundToEvenHeight: true,
@@ -195,28 +195,24 @@ module.exports = function (config) {
   }
 
   var overallError;
-  return timesnap(timesnapConfig)
-    .then(function () {
-      if (convertProcess) {
-        convertProcess.stdin.end();
-      }
-    })
-    .then(function () {
-      // wait for ffmpeg to finish
-      if (processPromise) {
-        return processPromise;
-      } else {
-        return makeProcessPromise();
-      }
-    }).catch(function (err) {
-      overallError = err;
-      log(err);
-    }).then(function () {
-      if (frameMode && !config.keepFrames) {
-        deleteFolder(frameDirectory);
-      }
-      if (overallError) {
-        throw overallError;
-      }
-    });
+  try {
+    await timesnap(timesnapConfig);
+    if (convertProcess) {
+      convertProcess.stdin.end();
+    }
+    if (processPromise) {
+      await processPromise;
+    } else {
+      await makeProcessPromise();
+    }
+  } catch (err) {
+    overallError = err;
+    log(err);
+  }
+  if (frameMode && !config.keepFrames) {
+    deleteFolder(frameDirectory);
+  }
+  if (overallError) {
+    throw overallError;
+  }
 };
