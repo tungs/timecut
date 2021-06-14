@@ -173,6 +173,8 @@ Opens https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=
     * Doesn't delete frames after processing them. Doesn't do anything in pipe mode.
 * <a name="cli-options-quiet" href="#cli-options-quiet">#</a> Quiet: `-q`, `--quiet`
     * Suppresses console logging.
+* <a name="cli-options-stop-function-name" href="#cli-options-stop-function-name">#</a> Stop Function Name: `--stop-function-name` *function name*
+    * Creates a function with *function name* that the client web page can call to stop capturing. For instance, `--stop-function-name=stopCapture` could be called in the client, via `stopCapture()`.
 * <a name="cli-options-version" href="#cli-options-version">#</a> Version: `-v`, `--version`
     * Displays version information. Immediately exits.
 * <a name="cli-options-help" href="#cli-options-help">#</a> Help: `-h`, `--help`
@@ -287,6 +289,7 @@ The Node API is structured similarly to the command line options, but there are 
     * <a name="js-config-quiet" href="#js-config-quiet">#</a> `quiet` &lt;[boolean][]&gt; Suppresses console logging.
     * <a name="js-config-logger" href="#js-config-logger">#</a> `logger` &lt;[function][](...[Object][])&gt; Replaces console logging with a particular function. The passed arguments are the same as those to `console.log` (in this case, usually one string).
     * <a name="js-config-log-to-std-err" href="#js-config-log-to-std-err">#</a> `logToStdErr` &lt;[boolean][]&gt; Logs to stderr instead of stdout. Doesn't do anything if `config.quiet` is set to true.
+    * <a name="js-config-stop-function-name" href="#js-config-stop-function-name">#</a> `stopFunctionName` &lt;[string][]&gt; *function name* that the client web page can call to stop capturing. For instance, `'stopCapture'` could be called in the client, via `stopCapture()`.
     * <a name="js-config-navigate-page-to-url" href="#js-config-navigate-page-to-url">#</a> `navigatePageToURL` &lt;[function][]([Object][])&gt; A function that navigates a puppeteer page to a URL, overriding the default navigation to a URL. The function should return a promise that resolves once the page is finished navigating. The function is passed the following object:
         * <a name="js-config-navigate-page-to-url-page" href="#js-config-navigate-page-to-url-page">#</a> `page` &lt;[Page][]&gt; the puppeteer page
         * <a name="js-config-navigate-page-to-url-url" href="#js-config-navigate-page-to-url-url">#</a> `url` &lt;[string][]&gt; the url to navigate to
