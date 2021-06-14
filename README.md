@@ -298,7 +298,7 @@ The Node API is structured similarly to the command line options, but there are 
     * <a name="js-config-prepare-page-for-screenshot" href="#js-config-prepare-page-for-screenshot">#</a> `preparePageForScreenshot` &lt;[function][]([Page][], [number][], [number][])&gt; A setup function that will be called before each screenshot. If it returns a promise, capture will be paused until the promise resolves.
         * `page` &lt;[Page][]&gt; The puppeteer instance of the page being captured.
         * `frameNumber` &lt;[number][]&gt; The current frame number (1 based).
-        * `totalFrames` &lt;[number][]&gt; The total number of frames.             
+        * `totalFrames` &lt;[number][]&gt; The total number of frames.
     * <a name="js-config-output-stream" href="#js-config-output-stream">#</a> `outputStream` &lt;[stream][]()&gt; A node stream to write data to from ffmpeg
     * <a name="js-config-output-stream-options" href="#js-config-output-stream-options">#</a> `outputStreamOptions` &lt;[Object][]&gt; Optional configuration object when using [`config.outputStream`](#js-config-output-stream)
         * <a name="js-config-output-stream-options-format" href="#js-config-output-stream-options-format">#</a> `format` &lt;[string][]&gt; Format of piped output. Defaults to `'mp4'` if undefined.
