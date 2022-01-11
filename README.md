@@ -99,12 +99,12 @@ Opens `drawing.html` in the current working directory, crops each frame to the b
 
 **<a name="cli-example-offsets" href="#cli-example-offsets">#</a> Using offsets**:
 ```
-timecut "https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=random" \ 
+timecut "https://tungs.github.io/amuse/truchet-tiles/#autoplay=true&switchStyle=random" \ 
   -S "#container" \ 
   --left=20 --top=40 --right=6 --bottom=30 \
   --duration=20
 ```
-Opens https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=random (note the quotes in the url and selector are necessary because of the `#` and `&`). Crops each frame to the `#container` element, with an additional crop of 20px, 40px, 6px, and 30px for the left, top, right, and bottom, respectively. Captures frames for 20 virtual seconds at 60fps to `video.mp4` in the current working directory.
+Opens https://tungs.github.io/amuse/truchet-tiles/#autoplay=true&switchStyle=random (note the quotes in the url and selector are necessary because of the `#` and `&`). Crops each frame to the `#container` element, with an additional crop of 20px, 40px, 6px, and 30px for the left, top, right, and bottom, respectively. Captures frames for 20 virtual seconds at 60fps to `video.mp4` in the current working directory.
 
 ### <a name="cli-options" href="#cli-options">#</a> Command Line *options*
 * <a name="cli-options-output" href="#cli-options-output">#</a> Output: `-O`, `--output` *name*
@@ -194,7 +194,7 @@ npm install timecut --save
 ```node
 const timecut = require('timecut');
 timecut({
-  url: 'https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=random',
+  url: 'https://tungs.github.io/amuse/truchet-tiles/#autoplay=true&switchStyle=random',
   viewport: {
     width: 800,               // sets the viewport (window size) to 800x600
     height: 600
@@ -215,7 +215,7 @@ timecut({
 const timecut = require('timecut');
 var pages = [
   {
-    url: 'https://tungs.github.io/truchet-tiles-original/#autoplay=true',
+    url: 'https://tungs.github.io/amuse/truchet-tiles/#autoplay=true',
     output: 'truchet-tiles.mp4',
     selector: '#container'
   }, {
