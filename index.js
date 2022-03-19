@@ -36,7 +36,7 @@ const fs = require('fs');
 const spawn = require('child_process').spawn;
 const cpus = require('os').cpus().length;
 const defaultFPS = 60;
-const defaultThread = 1;
+const defaultThreads = 1;
 const defaultDuration = 5;
 
 const makeFileDirectoryIfNeeded = function (filepath) {
@@ -79,7 +79,7 @@ module.exports = async function (config) {
   var outputOptions = config.outputOptions || [];
   var frameDirectory = config.tempDir || config.frameDir;
   var fps;
-  var thread;
+  var threads;
   var frameMode = config.frameCache || !config.pipeMode;
   var pipeMode = config.pipeMode;
   var processError;
@@ -113,8 +113,10 @@ module.exports = async function (config) {
     fps = defaultFPS;
   }
 
-  thread = config.thread || defaultThread;
-  if(thread > cpus){thread = cpus};
+  threads = config.threads || defaultThreads;
+  if (threads > cpus) {
+    threads = cpus;
+  }
 
   const log = function () {
     if (!config.quiet) {
@@ -204,33 +206,25 @@ module.exports = async function (config) {
 
   var overallError;
   try {
-    if(thread == 1){
+    if (threads === 1) {
       await timesnap(timesnapConfig);
     }else{
       var progress = [];
-
-      var totalFrame = config.frames || config.duration * fps || defaultDuration * fps;
+      var framesLeft = config.frames || config.duration * fps || defaultDuration * fps;
       var startFrame = 0;
-      while(thread >= 1){
-        let _frame = Math.floor(totalFrame/thread--);
+      while (threads >= 1) {
+        let frameLength = Math.floor(framesLeft / threads--);
         let frameStart = startFrame;
-        let frameEnd = frameStart + _frame;
-        let threadConfig = Object.assign({},timesnapConfig,{
-          shouldSkipFrame:page=>{
+        let frameEnd = frameStart + frameLength;
+        let threadConfig = Object.assign({} , timesnapConfig, {
+          shouldSkipFrame(page) {
             return page.frameCount <= frameStart || page.frameCount > frameEnd;
           }
-        })
-
-        progress.push(new Promise(resolve => {
-          timesnap(threadConfig).then(()=>{
-            resolve()
-          })
-        }))
-
+        });
+        progress.push(timesnap(threadConfig));
         startFrame = frameEnd;
-        totalFrame -= _frame;
+        framesLeft -= frameLength;
       }
-
       await Promise.all(progress);
     }
     if (convertProcess) {
