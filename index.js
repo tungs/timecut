@@ -208,7 +208,7 @@ module.exports = async function (config) {
   try {
     if (threads === 1) {
       await timesnap(timesnapConfig);
-    }else{
+    } else {
       var progress = [];
       var framesLeft = config.frames || config.duration * fps || defaultDuration * fps;
       var startFrame = 0;
@@ -217,8 +217,9 @@ module.exports = async function (config) {
         let frameStart = startFrame;
         let frameEnd = frameStart + frameLength;
         let threadConfig = Object.assign({} , timesnapConfig, {
-          shouldSkipFrame(page) {
-            return page.frameCount <= frameStart || page.frameCount > frameEnd;
+          shouldSkipFrame({ frameCount }) {
+            // frameCount is 1 based
+            return frameCount <= frameStart || frameCount > frameEnd;
           }
         });
         progress.push(timesnap(threadConfig));
