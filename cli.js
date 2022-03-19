@@ -43,7 +43,7 @@ commander
   .option('-O, --output <file name>', 'Name of output (default: video.mp4)')
   .option('-R, --fps <frame rate>', 'Frames per second to capture (default: 60)', parseFloat)
   .option('-d, --duration <seconds>', 'Duration of capture, in seconds (default: 5)', parseFloat)
-  .option('-T, --thread <count>', 'Number of threads to open the browser (default: 1)', parseFloat)
+  .option('-T, --threads <count>', 'Number of threads to open (default: 1)', parseInt)
   .option('--frames <count>', 'Number of frames to capture', parseInt)
   .option('-S, --selector <selector>', 'CSS Selector of item to capture')
   .option('-V, --viewport <dimensions>', 'Viewport dimensions, in pixels (e.g. 800,600)', function (str) {
