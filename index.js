@@ -34,7 +34,10 @@ const timesnap = require('timesnap');
 const path = require('path');
 const fs = require('fs');
 const spawn = require('child_process').spawn;
+const cpus = require('os').cpus().length;
 const defaultFPS = 60;
+const defaultThreads = 1;
+const defaultDuration = 5;
 
 const makeFileDirectoryIfNeeded = function (filepath) {
   var dir = path.parse(filepath).dir, ind, currDir;
@@ -76,6 +79,7 @@ module.exports = async function (config) {
   var outputOptions = config.outputOptions || [];
   var frameDirectory = config.tempDir || config.frameDir;
   var fps;
+  var threads;
   var frameMode = config.frameCache || !config.pipeMode;
   var pipeMode = config.pipeMode;
   var processError;
@@ -107,6 +111,11 @@ module.exports = async function (config) {
     fps = config.frames / config.duration;
   } else {
     fps = defaultFPS;
+  }
+
+  threads = config.threads || defaultThreads;
+  if (threads > cpus) {
+    threads = cpus;
   }
 
   const log = function () {
@@ -197,7 +206,28 @@ module.exports = async function (config) {
 
   var overallError;
   try {
-    await timesnap(timesnapConfig);
+    if (threads === 1) {
+      await timesnap(timesnapConfig);
+    } else {
+      var progress = [];
+      var framesLeft = config.frames || config.duration * fps || defaultDuration * fps;
+      var startFrame = 0;
+      while (threads >= 1) {
+        let frameLength = Math.floor(framesLeft / threads--);
+        let frameStart = startFrame;
+        let frameEnd = frameStart + frameLength;
+        let threadConfig = Object.assign({} , timesnapConfig, {
+          shouldSkipFrame({ frameCount }) {
+            // frameCount is 1 based
+            return frameCount <= frameStart || frameCount > frameEnd;
+          }
+        });
+        progress.push(timesnap(threadConfig));
+        startFrame = frameEnd;
+        framesLeft -= frameLength;
+      }
+      await Promise.all(progress);
+    }
     if (convertProcess) {
       convertProcess.stdin.end();
     }
