@@ -71,6 +71,7 @@ module.exports = async function (config) {
   }, config || {});
   var output = path.resolve(process.cwd(), config.output || 'video.mp4');
   var ffmpegArgs;
+  var ffmpegPath = config.ffmpegPath || 'ffmpeg';
   var inputOptions = config.inputOptions || [];
   var outputOptions = config.outputOptions || [];
   var frameDirectory = config.tempDir || config.frameDir;
@@ -157,7 +158,7 @@ module.exports = async function (config) {
       ffmpegArgs = ffmpegArgs.concat(['-y', output]);
     }
 
-    convertProcess = spawn('ffmpeg', ffmpegArgs);
+    convertProcess = spawn(ffmpegPath, ffmpegArgs);
     convertProcess.stderr.setEncoding('utf8');
     convertProcess.stderr.on('data', function (data) {
       log(data);
