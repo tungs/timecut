@@ -153,6 +153,8 @@ Opens https://tungs.github.io/amuse/truchet-tiles/#autoplay=true&switchStyle=ran
     * Overwrites `Math.random` with a seeded pseudorandom number generator. Can provide optional seeds as up to four comma separated integers (e.g. `--unrandomize 2,3,5,7` or `--unrandomize 42`). If `seeds` is `random-seed` (i.e. `--unrandomize random-seed`), a random seed will be generated, displayed (if not in quiet mode), and used. If `seeds` is not provided, it uses the seeds `10,0,20,0`.
 * <a name="cli-options-executable-path" href="#cli-options-executable-path">#</a> Executable Path: `--executable-path` *path*
     * Uses the Chromium/Chrome instance at *path* for puppeteer.
+* <a name="cli-options-ffmpeg-path" href="#cli-options-ffmpeg-path">#</a> ffmpeg Path: `--ffmpeg-path` *path*
+    * Uses the ffmpeg *path* for running ffmpeg.
 * <a name="cli-options-launch-arguments" href="#cli-options-launch-arguments">#</a> Puppeteer Launch Arguments: `-L`, `--launch-arguments` *arguments*
     * Arguments to pass to Puppeteer/Chromium, enclosed in quotes. Example: `--launch-arguments="--single-process"`. A list of arguments can be found [here](https://peter.sh/experiments/chromium-command-line-switches).
 * <a name="cli-options-no-headless" href="#cli-options-no-headless">#</a> No Headless: `--no-headless`
@@ -277,6 +279,7 @@ The Node API is structured similarly to the command line options, but there are 
     * <a name="js-config-bottom" href="#js-config-bottom">#</a> `bottom` &lt;[number][]&gt; Bottom edge of capture, in pixels. Ignored if `config.height` is specified.
     * <a name="js-config-unrandomize" href="#js-config-unrandomize">#</a> `unrandomize` &lt;[boolean][] | [string][] | [number][] | [Array][]&lt;[number][]&gt;&gt; Overwrites `Math.random` with a seeded pseudorandom number generator. If it is a number, an array of up to four numbers, or a string of up to four comma separated numbers, then those values are used as the initial seeds. If it is true, then the default seed is used. If it is the string 'random-seed', a random seed will be generated, displayed (if quiet mode is not enabled), and used.
     * <a name="js-config-executable-path" href="#js-config-executable-path">#</a> `executablePath` &lt;[string][]&gt; Uses the Chromium/Chrome instance at `config.executablePath` for puppeteer.
+    * <a name="js-config-ffmpeg-path" href="#js-config-ffmpeg-path">#</a> `ffmpegPath` &lt;[string][]&gt; Uses the ffmpeg *path* for running ffmpeg.
     * <a name="js-config-launch-arguments" href="#js-config-launch-arguments">#</a> `launchArguments` &lt;[Array][] &lt;[string][]&gt;&gt; Extra arguments for Puppeteer/Chromium. Example: `['--single-process']`. A list of arguments can be found [here](https://peter.sh/experiments/chromium-command-line-switches).
     * <a name="js-config-headless" href="#js-config-headless">#</a> `headless` &lt;[boolean][]&gt; Runs puppeteer in headless (nonwindowed) mode (default: `true`).
     * <a name="js-config-screenshot-type" href="#js-config-screenshot-type">#</a> `screenshotType` &lt;[string][]&gt; Output image format for the screenshots. By default, `'png'` is used. `'jpeg'` is also available.
