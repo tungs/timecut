@@ -48,7 +48,7 @@ const timecut = require('timecut-core');
 const puppeteer = require('puppeteer');
 timecut({
   launcher: launchOptions => puppeteer.launch(launchOptions),
-  url: 'https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=random',
+  url: 'https://tungs.github.io/amuse/truchet-tiles/#autoplay=true&switchStyle=random',
   viewport: {
     width: 800,               // sets the viewport (window size) to 800x600
     height: 600
@@ -73,7 +73,7 @@ const timecut = require('timecut-core');
 const puppeteer = require('puppeteer');
 timecut({
   browser: puppeteer.launch({ dumpio: true }), // can add custom launch options here
-  url: 'https://tungs.github.io/truchet-tiles-original/#autoplay=true&switchStyle=random',
+  url: 'https://tungs.github.io/amuse/truchet-tiles/#autoplay=true&switchStyle=random',
   selector: '#container',
   output: 'truchet-tiles.mp4'
 }).then(function () {
@@ -120,6 +120,7 @@ The Node API is structured similarly to the command line options, but there are 
     * <a name="js-config-bottom" href="#js-config-bottom">#</a> `bottom` &lt;[number][]&gt; Bottom edge of capture, in pixels. Ignored if `config.height` is specified.
     * <a name="js-config-unrandomize" href="#js-config-unrandomize">#</a> `unrandomize` &lt;[boolean][] | [string][] | [number][] | [Array][]&lt;[number][]&gt;&gt; Overwrites `Math.random` with a seeded pseudorandom number generator. If it is a number, an array of up to four numbers, or a string of up to four comma separated numbers, then those values are used as the initial seeds. If it is true, then the default seed is used. If it is the string 'random-seed', a random seed will be generated, displayed (if quiet mode is not enabled), and used.
     * <a name="js-config-executable-path" href="#js-config-executable-path">#</a> `executablePath` &lt;[string][]&gt; Uses the Chromium/Chrome instance at `config.executablePath` for puppeteer.
+    * <a name="js-config-ffmpeg-path" href="#js-config-ffmpeg-path">#</a> `ffmpegPath` &lt;[string][]&gt; Uses the ffmpeg *path* for running ffmpeg.
     * <a name="js-config-launch-arguments" href="#js-config-launch-arguments">#</a> `launchArguments` &lt;[Array][] &lt;[string][]&gt;&gt; Extra arguments for Puppeteer/Chromium. Example: `['--single-process']`. A list of arguments can be found [here](https://peter.sh/experiments/chromium-command-line-switches).
     * <a name="js-config-headless" href="#js-config-headless">#</a> `headless` &lt;[boolean][]&gt; Runs puppeteer in headless (nonwindowed) mode (default: `true`).
     * <a name="js-config-screenshot-type" href="#js-config-screenshot-type">#</a> `screenshotType` &lt;[string][]&gt; Output image format for the screenshots. By default, `'png'` is used. `'jpeg'` is also available.

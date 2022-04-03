@@ -1,6 +1,6 @@
 {
   "name": "timecut-core",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Record smooth movies of web pages",
   "repository": {
     "type": "git",
@@ -18,9 +18,9 @@
   },
   "license": "BSD-3-Clause",
   "dependencies": {
-    "timesnap-core": "0.3.2"
+    "timesnap-core": "0.3.3"
   },
   "devDependencies": {
-    "eslint": "^6.8.0"
+    "eslint": "^7.32.0"
   }
 }
